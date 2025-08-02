@@ -1,0 +1,192 @@
+﻿using Firebase.Auth;
+using Firebase.Database;
+using Microsoft.Extensions.Configuration;
+
+namespace TruckSlip.ViewModels
+{
+    public partial class HomeViewModel : BaseViewModel
+    {
+
+        private readonly FirebaseAuthClient _firebaseAuthClient;
+        private readonly IDataServiceProvider _provider;
+        private readonly IConfiguration _configuration;
+        private readonly string _sqliteDbPath = Path.Combine(FileSystem.Current.AppDataDirectory, "TruckSlip.db3"); // Local SQLite database path
+        private IDataService Database => _provider.Current; 
+        private string DatabaseUrl => _configuration.GetSection("Firebase")["DatabaseUrl"] ?? throw new Exception("Database Error");
+        private bool _isDatabaseConnected = false;
+
+        public bool UseRemote
+        {
+            get => Preferences.Get("UseRemote", true);
+            set
+            {
+                Preferences.Set("UseRemote", value);
+                _isDatabaseConnected = false;
+                OnPropertyChanged(nameof(UseRemote));
+            }
+        }
+
+        public HomeViewModel(IDataServiceProvider provider, 
+            FirebaseAuthClient firebaseAuthClient,
+            IConfiguration configuration)
+        {
+            _provider = provider;
+            _firebaseAuthClient = firebaseAuthClient;
+            _configuration = configuration;
+        }
+
+        [RelayCommand]
+        public async Task Appearing()
+        {
+            if (_isDatabaseConnected) return;
+            try
+            {
+                if (UseRemote)
+                {
+                    _provider.UseRemote();
+                    var user = _firebaseAuthClient.User;
+                    if (user == null) throw new ArgumentNullException(nameof(user), "User cannot be null.");
+                    RefreshDataConnection(user);
+                }
+                else
+                {
+                    _provider.UseLocal();
+                }
+
+                if (Database == null) throw new Exception("Database Error");
+
+                await Database.InitializeDatabaseAsync();
+                //await ClearSignaturesAsync(Database);
+
+                _isDatabaseConnected = true;
+            }
+            catch (Exception ex)
+            { await Shell.Current.DisplayAlert("Error", ex.Message, "OK"); }
+        }
+
+        private void RefreshDataConnection(User user)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user), "User cannot be null.");
+
+            var firebaseClient = new FirebaseClient(DatabaseUrl, new FirebaseOptions
+            {
+                AuthTokenAsyncFactory = async () => await user.GetIdTokenAsync(true)
+            });
+            var newService = new FirebaseDataService(firebaseClient);
+            _provider.UpdateRemote(newService);
+        }
+
+        [RelayCommand]
+        public async Task SignOut()
+        {
+            if (!UseRemote) return;
+            try
+            {
+                _firebaseAuthClient.SignOut();
+                Preferences.Set("RememberMe", false);
+                await Shell.Current.GoToAsync($"//{nameof(SignInPage)}");
+            }
+            catch (Exception ex)
+            { await Shell.Current.DisplayAlert("Error", ex.Message, "OK"); }
+        }
+
+        [RelayCommand]
+        public static async Task NavigateToPage(string pageName)
+        => await Shell.Current.GoToAsync(pageName);        
+
+        [RelayCommand]
+        public async Task ImportData()
+        {
+            try
+            {
+                var result = await FilePicker.PickAsync(new PickOptions { PickerTitle = "Select data file *.db" });
+                if (result == null) return;
+
+                if (UseRemote)
+                {
+                    File.Copy(result.FullPath, _sqliteDbPath, true);
+                    await Database.InitializeDatabaseAsync();
+                    FirebaseToSqliteHelper helper = new(_provider);
+                    await helper.CreateBackupAsync();
+                }
+                else
+                {
+                    await Database.CloseDatabaseAsync();
+                    File.Copy(result.FullPath, _sqliteDbPath, true);
+                }
+
+                await Toast.Make("Database has been restored from backup", ToastDuration.Short).Show();
+            }
+            catch (Exception ex) { await Shell.Current.DisplayAlert("Error!", ex.Message, "Ok"); }
+        }
+
+        [RelayCommand]
+        public async Task BackupData()
+        {
+
+            if (UseRemote)
+            {
+                FirebaseToSqliteHelper helper = new(_provider);
+                await helper.CreateBackupAsync();
+            }
+            else
+                await Database.CloseDatabaseAsync();
+
+#if !WINDOWS
+            await BackupDatabaseIOS();
+#else
+            await BackupDatabaseWindows(_sqliteDbPath, CancellationToken.None);
+#endif
+        }
+
+        private async Task BackupDatabaseIOS()
+            => await Share.Default.RequestAsync(new ShareFileRequest("Backup Data", new ShareFile(_sqliteDbPath)));
+
+        private async Task BackupDatabaseWindows(string dataLocation, CancellationToken cancellationToken)
+        {
+#if WINDOWS
+            var result = await FolderPicker.PickAsync(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), cancellationToken);
+            if (!result.IsSuccessful) return;
+
+            string newFileName = await GetFileName(Path.GetFileNameWithoutExtension(dataLocation));
+            File.Copy(dataLocation, Path.Combine(result.Folder.Path, $"{newFileName}.db3"), true);
+            await Toast.Make("Data backup successful", ToastDuration.Short).Show(cancellationToken);
+#else
+            await Task.CompletedTask;
+#endif
+        }
+
+        [RelayCommand]
+        public async Task DeleteAllData()
+        {
+            try
+            {
+                if (!await Shell.Current.DisplayAlert("WARNING!",
+                    "This will delete all application data. " +
+                    "Are you sure you want to proceed? This action can not be undone.",
+                    "Yes", "No")) return;
+
+                await Database.DropTablesAsync();
+                await Database.CreateTablesAsync();
+                await Toast.Make("Database has been restored to clean install", ToastDuration.Short).Show();
+            }
+            catch (Exception ex) { await Shell.Current.DisplayAlert("Error!", ex.Message, "Ok"); }
+        }
+
+        private static async Task<string> GetFileName(string initialValue)
+        {
+            string? fileName = await Shell.Current.DisplayPromptAsync
+            (
+                title: "Edit File Name",
+                message: "File Name",
+                accept: "OK",
+                cancel: "Cancel",
+                placeholder: initialValue,
+                maxLength: 255,
+                keyboard: Keyboard.Text,
+                initialValue: initialValue
+            );
+            return fileName;
+        }
+    }
+}

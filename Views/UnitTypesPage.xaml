@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TruckSlip.Views.UnitTypesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:TruckSlip.Controls"
+    xmlns:datasource="clr-namespace:TruckSlip.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:TruckSlip.ViewModels"
+    x:Name="this"
+    Title="Unit Types"
+    x:DataType="vm:UnitTypesViewModel">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+            Command="{Binding AppearingCommand}"
+            EventName="Appearing" />
+    </ContentPage.Behaviors>
+
+    <VerticalStackLayout Padding="15" Spacing="8">
+        <controls:DescriptionBox
+            Text1="Description:"
+            Text2="Use this form to add, edit or delete unit types for inventory items."
+            Text3="WARNING"
+            Text4="Deleting a unit type will delete ALL records associated with that unit type."
+            Text5="This could result in substantial loss of data." />
+        <Label FontAttributes="Bold" Text="Selected Unit" />
+        <controls:ComboBox
+            DisplayMember="UnitName"
+            IsEnabled="{Binding EnableDelete}"
+            ItemSource="{Binding UnitTypes}"
+            Placeholder="Required"
+            SelectedItem="{Binding SelectedUnit}">
+            <controls:ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="datasource:UnitType">
+                    <Label Text="{Binding UnitName}" />
+                </DataTemplate>
+            </controls:ComboBox.ItemTemplate>
+        </controls:ComboBox>
+        <Label FontAttributes="Bold" Text="Unit Name" />
+        <Entry
+            x:Name="NameEntry"
+            FontSize="18"
+            HorizontalOptions="StartAndExpand"
+            IsEnabled="{Binding IsEnabled}"
+            MinimumWidthRequest="150"
+            Text="{Binding SelectedUnit.UnitName}">
+            <Entry.Behaviors>
+                <toolkit:SelectAllTextBehavior />
+            </Entry.Behaviors>
+        </Entry>
+        <HorizontalStackLayout Spacing="5">
+            <Button
+                Command="{Binding EditSaveCommand}"
+                CommandParameter="{Reference NameEntry}"
+                IsEnabled="{Binding EnableEdit}"
+                Text="{Binding EditSaveButtonText}">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="{Binding FontFamily}"
+                        Glyph="{Binding EditSaveImage}"
+                        Size="25" />
+                </Button.ImageSource>
+            </Button>
+            <Button
+                Command="{Binding AddCancelCommand}"
+                CommandParameter="{Reference NameEntry}"
+                Text="{Binding AddCancelButtonText}">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="{Binding FontFamily}"
+                        Glyph="{Binding AddCancelImage}"
+                        Size="25" />
+                </Button.ImageSource>
+            </Button>
+            <Button
+                Command="{Binding DeleteCommand}"
+                IsEnabled="{Binding EnableDelete}"
+                Text="Delete">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="{Binding FontFamily}"
+                        Glyph="{Binding DeleteImage}"
+                        Size="25" />
+                </Button.ImageSource>
+            </Button>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

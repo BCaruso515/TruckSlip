@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TruckSlip.Views.SignUpPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:TruckSlip.ViewModels"
+    Title="Sign up"
+    x:DataType="vm:SignUpViewModel">
+
+    <VerticalStackLayout Padding="10" Spacing="15">
+        <Entry
+            Keyboard="Email"
+            Placeholder="Enter your email"
+            Text="{Binding Email}" />
+        <Entry Placeholder="Enter your user name" Text="{Binding DisplayName}" />
+        <Entry
+            IsPassword="True"
+            Placeholder="Enter your password"
+            Text="{Binding Password}" />
+        <Entry
+            IsPassword="True"
+            Placeholder="Confirm your password"
+            Text="{Binding ConfirmPassword}" />
+        <Button Command="{Binding SignUpCommand}" Text="Submit" />
+    </VerticalStackLayout>
+</ContentPage>
+

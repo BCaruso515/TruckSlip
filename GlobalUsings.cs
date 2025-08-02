@@ -1,0 +1,14 @@
+﻿global using System.Collections.ObjectModel;
+global using CommunityToolkit.Mvvm.ComponentModel;
+global using CommunityToolkit.Mvvm.Input;
+global using CommunityToolkit.Maui.Alerts;
+global using CommunityToolkit.Maui.Core;
+global using CommunityToolkit.Maui.Storage;
+global using CommunityToolkit.Maui.Views;
+global using TruckSlip.Data;
+global using TruckSlip.Helpers;
+global using TruckSlip.Models;
+global using TruckSlip.Views;
+global using TruckSlip.ViewModels;
+global using TruckSlip.Reports;
+global using TruckSlip.Controls;

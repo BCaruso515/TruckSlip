@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TruckSlip.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:TruckSlip.Helpers"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:TruckSlip.ViewModels"
+    x:Name="this"
+    Title="Home Page"
+    x:DataType="vm:HomeViewModel">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+            Command="{Binding AppearingCommand}"
+            EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding SignOutCommand}"
+            IsEnabled="{Binding UseRemote}"
+            Text="Sign Out">
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <Grid
+            Padding="15"
+            RowDefinitions="Auto, *"
+            RowSpacing="15">
+            <FlexLayout
+                AlignContent="Start"
+                AlignItems="Center"
+                Direction="Row"
+                FlowDirection="LeftToRight"
+                JustifyContent="Start"
+                Wrap="Wrap">
+                <Button
+                    Command="{Binding NavigateToPageCommand}"
+                    CommandParameter="JobsitePage"
+                    Style="{StaticResource Key=ImageTextButton}"
+                    Text="Jobsite">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="{Binding FontFamily}"
+                            Glyph="{x:Static helpers:FontAwesomeHelper.Building}"
+                            Size="40" />
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Command="{Binding NavigateToPageCommand}"
+                    CommandParameter="UnitTypesPage"
+                    Style="{StaticResource Key=ImageTextButton}"
+                    Text="Unit Types">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="{Binding FontFamily}"
+                            Glyph="{x:Static helpers:FontAwesomeHelper.Ruler}"
+                            Size="40" />
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Command="{Binding NavigateToPageCommand}"
+                    CommandParameter="ProductPage"
+                    Style="{StaticResource Key=ImageTextButton}"
+                    Text="Inventory Items">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="{Binding FontFamily}"
+                            Glyph="{x:Static helpers:FontAwesomeHelper.TrowelBricks}"
+                            Size="40" />
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Command="{Binding NavigateToPageCommand}"
+                    CommandParameter="OrderPage"
+                    Style="{StaticResource Key=ImageTextButton}"
+                    Text="Truck Request">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="{Binding FontFamily}"
+                            Glyph="{x:Static helpers:FontAwesomeHelper.Truck}"
+                            Size="40" />
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Command="{Binding ImportDataCommand}"
+                    Style="{StaticResource Key=ImageTextButton}"
+                    Text="Restore/Import Data">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="{Binding FontFamily}"
+                            Glyph="{x:Static helpers:FontAwesomeHelper.Download}"
+                            Size="40" />
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Command="{Binding BackupDataCommand}"
+                    Style="{StaticResource Key=ImageTextButton}"
+                    Text="Backup/Export Data">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="{Binding FontFamily}"
+                            Glyph="{x:Static helpers:FontAwesomeHelper.Upload}"
+                            Size="40" />
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Command="{Binding DeleteAllDataCommand}"
+                    Style="{StaticResource Key=ImageTextButton}"
+                    Text="Factory Reset Data">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="{Binding FontFamily}"
+                            Glyph="{x:Static helpers:FontAwesomeHelper.TrashCanArrowUp}"
+                            Size="40" />
+                    </Button.ImageSource>
+                </Button>
+            </FlexLayout>
+            <HorizontalStackLayout Grid.Row="1" Spacing="25">
+                <Label Text="Use Firebase database?" VerticalOptions="Start" />
+                <Switch IsToggled="{Binding UseRemote}" VerticalOptions="Start">
+                    <Switch.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+                            Command="{Binding AppearingCommand}"
+                            EventName="Toggled" />
+                    </Switch.Behaviors>
+                </Switch>
+            </HorizontalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

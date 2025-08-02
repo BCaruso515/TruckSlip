@@ -1,0 +1,97 @@
+﻿namespace TruckSlip.ViewModels
+{
+    [QueryProperty(nameof(SelectedOrder), "SelectedOrder")]
+    public partial class OrderItemsViewModel : BaseViewModel
+    {
+        [ObservableProperty] private OrderItem _selectedOrderItem = new();
+        [ObservableProperty] private UnitType _selectedUnitType = new();
+        [ObservableProperty] private Order _selectedOrder = new();
+        [ObservableProperty] bool _enableAddToOrder;
+
+        private Product _selectedProduct = new();
+        private readonly IDataServiceProvider _provider;
+        private IDataService Database => _provider.Current;
+
+        public Product SelectedProduct
+        {
+            get => _selectedProduct;
+            set
+            {
+                if (value.ProductId == 0) return;
+                _selectedProduct = value;
+                SelectedUnitType = UnitTypes.First(UnitTypes => UnitTypes.UnitId == _selectedProduct.UnitId);
+                SelectedOrderItem.Quantity = 1;
+                OnPropertyChanged(nameof(SelectedOrderItem));
+                OnPropertyChanged(nameof(SelectedProduct));
+            }
+        }
+
+        public OrderItemsViewModel(IDataServiceProvider provider)
+        {
+            _provider = provider;
+            RefreshButtonState();
+        }
+
+        [RelayCommand]
+        public async Task Appearing()
+        {
+            if (SelectedOrder == null || SelectedOrder.OrderId == 0)
+            {
+                await Shell.Current.DisplayAlert("Error!", "Order cannot be null!", "Ok");
+                return;
+            }
+
+            if (!await RefreshUnitTypesAsync(Database))
+            {
+                //Alert to add unit types
+                await Shell.Current.DisplayAlert("Alert!", "Unit Types must be added to continue...", "Ok");
+                return;
+            }
+
+            if (!await RefreshProductsAsync(Database))
+            {
+                EnableAddToOrder = false;
+                return;
+            }
+            SelectedProduct = Products.First();
+            EnableAddToOrder = true;
+
+            await RefreshItemsQueryAsync(Database, SelectedOrder.OrderId);
+        }
+        
+        [RelayCommand]
+        public async Task AddToOrder()
+        {
+            if (Orders.Count == 0) return;
+            if (Products.Count == 0) return;
+
+            await Database.AddOrUpdateOrderItemAsync(new()
+            {
+                OrderId = SelectedOrder.OrderId,
+                ProductId = SelectedProduct.ProductId,
+                Quantity = SelectedOrderItem.Quantity
+            });
+            await RefreshItemsQueryAsync(Database, SelectedOrder.OrderId);
+        }
+
+        [RelayCommand]
+        public async Task RemoveFromOrder(OrderItemsQuery itemsQuery)
+        {
+            if (itemsQuery == null) return;
+            ObservableCollection<OrderItem> results = await Database.GetOrderItemAsync();
+            var result = results.Where(x => x.OrderItemId == itemsQuery.OrderItemId).First();
+            await Database.DeleteOrderItemAsync(result);
+            await RefreshItemsQueryAsync(Database, SelectedOrder.OrderId);
+        }
+        [RelayCommand]
+        public async Task ExportOrder()
+        {
+            if (! await RefreshJobsiteAsync(Database))
+                throw new Exception("Jobsite cannot be null!");
+            var jobsite = Jobsites.First();
+
+            var orderReport = new OrderReport(jobsite, SelectedOrder, ItemsQuery);
+            orderReport.GeneratePdfAndShow();
+        }
+    }
+}

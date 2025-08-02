@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TruckSlip.Views.OrderPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:TruckSlip.Controls"
+    xmlns:datasource="clr-namespace:TruckSlip.Models"
+    xmlns:helpers="clr-namespace:TruckSlip.Helpers"
+    xmlns:templates="clr-namespace:TruckSlip.DataTemplates"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:TruckSlip.ViewModels"
+    x:Name="this"
+    Title="Truck Request"
+    x:DataType="vm:OrderViewModel">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+            Command="{Binding AppearingCommand}"
+            EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ScrollView>
+        <Grid
+            Padding="15"
+            RowDefinitions="Auto,*"
+            RowSpacing="10">
+            <VerticalStackLayout Grid.Row="0" Spacing="8">
+                <Label FontAttributes="Bold" Text="Selected Order" />
+                <controls:ComboBox
+                    DisplayMember="Date"
+                    IsEnabled="{Binding EnableDelete}"
+                    ItemSource="{Binding Orders}"
+                    Placeholder="Required"
+                    SelectedItem="{Binding SelectedOrder}">
+                    <controls:ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="datasource:Order">
+                            <Label Text="{Binding Date}" />
+                        </DataTemplate>
+                    </controls:ComboBox.ItemTemplate>
+                </controls:ComboBox>
+                <Label FontAttributes="Bold" Text="Job Name" />
+                <Entry IsEnabled="False" Text="{Binding SelectedJobsite.Name}" />
+                <Label FontAttributes="Bold" Text="Date" />
+                <DatePicker
+                    x:Name="date"
+                    Date="{Binding SelectedDate}"
+                    IsEnabled="{Binding IsEnabled}" />
+                <HorizontalStackLayout Spacing="10">
+                    <Label Text="Delivery" VerticalOptions="Center" />
+                    <CheckBox
+                        IsChecked="{Binding IsDelivery}"
+                        IsEnabled="{Binding IsEnabled}"
+                        VerticalOptions="Center" />
+                    <Label Text="Pickup" VerticalOptions="Center" />
+                    <CheckBox
+                        IsChecked="{Binding IsPickup}"
+                        IsEnabled="{Binding IsEnabled}"
+                        VerticalOptions="Center" />
+                </HorizontalStackLayout>
+                <Editor
+                    AutoSize="TextChanges"
+                    HeightRequest="100"
+                    IsEnabled="{Binding IsEnabled}"
+                    Placeholder="Enter any additional information here..."
+                    Text="{Binding SelectedOrder.Notes}" />
+                <HorizontalStackLayout Spacing="5">
+                    <Button
+                        Command="{Binding EditSaveCommand}"
+                        CommandParameter="{Reference date}"
+                        IsEnabled="{Binding EnableEdit}"
+                        Text="{Binding EditSaveButtonText}">
+                        <Button.ImageSource>
+                            <FontImageSource
+                                FontFamily="{Binding FontFamily}"
+                                Glyph="{Binding EditSaveImage}"
+                                Size="25" />
+                        </Button.ImageSource>
+                    </Button>
+                    <Button
+                        Command="{Binding AddCancelCommand}"
+                        IsEnabled="{Binding EnableAdd}"
+                        CommandParameter="{Reference date}"
+                        Text="{Binding AddCancelButtonText}">
+                        <Button.ImageSource>
+                            <FontImageSource
+                                FontFamily="{Binding FontFamily}"
+                                Glyph="{Binding AddCancelImage}"
+                                Size="25" />
+                        </Button.ImageSource>
+                    </Button>
+                    <Button
+                        Command="{Binding DeleteCommand}"
+                        IsEnabled="{Binding EnableDelete}"
+                        Text="Delete">
+                        <Button.ImageSource>
+                            <FontImageSource
+                                FontFamily="{Binding FontFamily}"
+                                Glyph="{Binding DeleteImage}"
+                                Size="25" />
+                        </Button.ImageSource>
+                    </Button>
+                </HorizontalStackLayout>
+                <Button
+                    Command="{Binding AddItemsCommand}"
+                    IsEnabled="{Binding EnableDelete}"
+                    Text="Add Items to Order">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="{Binding FontFamily}"
+                            Glyph="{x:Static helpers:FontAwesomeHelper.FileCirclePlus}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

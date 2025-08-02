@@ -1,0 +1,162 @@
+﻿namespace TruckSlip.ViewModels
+{
+    public partial class ProductViewModel : BaseViewModel
+    {
+        [ObservableProperty] private UnitType _selectedUnit = new();
+        [ObservableProperty] private InventoryType _selectedType = new();
+
+        private Product _selectedProduct = new();
+        private int _index = -1;
+        private readonly IDataServiceProvider _provider;
+        private IDataService Database => _provider.Current;
+
+        public Product SelectedProduct
+        {
+            get => _selectedProduct;
+            set
+            {
+                if (_selectedProduct == value) return;
+                _selectedProduct = value;
+
+                SetUnitType();
+                SetInventoryType();
+                OnPropertyChanged();
+            }
+        }
+
+        public ProductViewModel(IDataServiceProvider provider)
+        {
+            _provider = provider;
+            RefreshButtonState();
+        }
+
+        [RelayCommand]
+        public async Task Appearing()
+        {
+            SetButtonText(false);
+            
+            if (RefreshInventoryTypes())
+                SelectedType = InventoryTypes.First();
+
+            EnableAdd = await RefreshUnitTypesAsync(Database);
+            if (!EnableAdd)
+            {
+                await Shell.Current.DisplayAlert("Alert!", "Unit Types must be added to continue...", "Ok");
+                EnableDelete = EnableEdit = false;
+                return;
+            }
+                
+            SelectedUnit = UnitTypes.First();
+                
+            if (!await RefreshProductsAsync(Database))
+            {
+                EnableDelete = EnableEdit = false;
+                return;
+            }
+
+            SelectedProduct = Products.First();
+            EnableDelete = EnableEdit = true;
+        }
+
+        [RelayCommand]
+        public async Task EditSave(View view)
+        {
+            try
+            {
+                if (EditSaveButtonText == "Edit")
+                {
+                    SetButtonText(true);
+                    _index = Products.IndexOf(SelectedProduct);
+                    view.Focus();
+                }
+                else
+                {
+                    SelectedProduct.UnitId = SelectedUnit.UnitId;
+                    SelectedProduct.TypeId = SelectedType.TypeId;
+                    if (await Database.AddOrUpdateProductAsync(SelectedProduct))
+                    {
+                        SetButtonText(false);
+                        EnableDelete = EnableEdit = await RefreshProductsAsync(Database);
+                        SelectedProduct = Products.Where(x => x.ProductId == SelectedProduct.ProductId).First();
+                    }
+                }
+            }
+            catch (Exception ex)
+            { await Shell.Current.DisplayAlert("Error!", ex.Message, "Ok"); }
+        }
+
+        [RelayCommand]
+        public async Task AddCancel(View view)
+        {
+            try
+            {
+                if (AddCancelButtonText == "Add")
+                {
+                    SetButtonText(true);
+                    _index = Products.IndexOf(SelectedProduct);
+                    SelectedProduct = new();
+                    EnableEdit = true;
+                    view.Focus();
+                }
+                else
+                {
+                    SetButtonText(false);
+                    EnableDelete = EnableEdit = await RefreshProductsAsync(Database);
+
+                    if (_index > -1)
+                        SelectedProduct = Products[_index];
+                    _index = -1;
+                }
+            }
+            catch (Exception ex)
+            { await Shell.Current.DisplayAlert("Error!", ex.Message, "Ok"); }
+        }
+
+        [RelayCommand]
+        public async Task Delete()
+        {
+            try
+            {
+                _index = Products.IndexOf(SelectedProduct);
+
+                if (!await Shell.Current.DisplayAlert("WARNING!",
+                    "Deleting this Product also deletes all records containing this Product, " +
+                    "are you sure you want to proceed? This action can not be undone.",
+                    "Yes", "No")) return;
+
+                await Database.DeleteProductAsync(SelectedProduct);
+                EnableDelete = EnableEdit = await RefreshProductsAsync(Database);
+
+                if (Products.Count == 0)
+                    return;
+
+                if (_index > Products.IndexOf(Products.Last()))
+                    SelectedProduct = Products.Last();
+                else
+                    SelectedProduct = Products[_index];
+
+            }
+            catch (Exception ex)
+            { await Shell.Current.DisplayAlert("Error!", ex.Message, "Ok"); }
+
+            finally
+            { _index = -1; }
+        }
+
+        private void SetUnitType()
+        {
+            if (SelectedProduct.UnitId == 0) return;
+            var result = UnitTypes.Where(x => x.UnitId == SelectedProduct.UnitId).First();
+            if (result == null) return;
+            SelectedUnit = result;
+        }
+
+        private void SetInventoryType()
+        {
+            if (SelectedProduct.TypeId == 0) return;
+            var result = InventoryTypes.Where(x => x.TypeId == SelectedProduct.TypeId).First();
+            if (result == null) return;
+            SelectedType = result;
+        }
+    }
+}

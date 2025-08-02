@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="TruckSlip.Controls.DescriptionBox"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:TruckSlip.Controls"
+    x:Name="this"
+    x:DataType="controls:DescriptionBox">
+    <VerticalStackLayout>
+        <Button
+            x:Name="showButton"
+            Clicked="Button_Clicked"
+            HorizontalOptions="Start"
+            Text="Show Description" />
+        <Border x:Name="descriptionBox" Padding="10">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="15" />
+            </Border.StrokeShape>
+            <VerticalStackLayout>
+                <Label x:Name="label1" FontAttributes="Bold" />
+                <Label x:Name="label2" />
+                <Label x:Name="label3" />
+                <Label x:Name="label4" />
+                <Label x:Name="label5" />
+                <Button
+                    x:Name="hideButton"
+                    Clicked="Button_Clicked"
+                    HorizontalOptions="End"
+                    Text="Hide" />
+            </VerticalStackLayout>
+        </Border>
+    </VerticalStackLayout>
+</ContentView>

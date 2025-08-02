@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="TruckSlip.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:TruckSlip.Helpers"
+    xmlns:local="clr-namespace:TruckSlip"
+    xmlns:views="clr-namespace:TruckSlip.Views"
+    Title="TruckSlip">
+
+    <ShellContent
+        ContentTemplate="{DataTemplate views:SignInPage}"
+        FlyoutItemIsVisible="False"
+        Route="SignInPage" />
+
+    <FlyoutItem Title="Home" Route="HomePage">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="free-solid-900"
+                Glyph="{x:Static helpers:FontAwesomeHelper.House}"
+                Size="25"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate views:HomePage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Jobsite" Route="JobsitePage">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="free-solid-900"
+                Glyph="{x:Static helpers:FontAwesomeHelper.Building}"
+                Size="25"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate views:JobsitePage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Unit Types" Route="UnitTypesPage">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="free-solid-900"
+                Glyph="{x:Static helpers:FontAwesomeHelper.Ruler}"
+                Size="25"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate views:UnitTypesPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Inventory Items" Route="ProductPage">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="free-solid-900"
+                Glyph="{x:Static helpers:FontAwesomeHelper.TrowelBricks}"
+                Size="25"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate views:ProductPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Truck Request" Route="OrderPage">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="free-solid-900"
+                Glyph="{x:Static helpers:FontAwesomeHelper.Truck}"
+                Size="25"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate views:OrderPage}" />
+    </FlyoutItem>
+</Shell>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TruckSlip.Views.OrderItemsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:TruckSlip.Controls"
+    xmlns:datasource="clr-namespace:TruckSlip.Models"
+    xmlns:helpers="clr-namespace:TruckSlip.Helpers"
+    xmlns:templates="clr-namespace:TruckSlip.DataTemplates"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:TruckSlip.ViewModels"
+    x:Name="this"
+    Title="Order Items"
+    x:DataType="vm:OrderItemsViewModel">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+            Command="{Binding AppearingCommand}"
+            EventName="Appearing" />
+    </ContentPage.Behaviors>
+
+    <Grid
+        Padding="15"
+        RowDefinitions="Auto,*,Auto"
+        RowSpacing="10">
+        <VerticalStackLayout Spacing="8">
+            <Label FontAttributes="Bold" Text="Order Items" />
+            <controls:ComboBox
+                DisplayMember="Name"
+                IsEnabled="{Binding EnableAddToOrder}"
+                ItemSource="{Binding Products}"
+                Placeholder="Required"
+                SelectedItem="{Binding SelectedProduct}">
+                <controls:ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="datasource:Product">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="{Binding TaskCode}" />
+                            <Label Text="{Binding Name}" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </controls:ComboBox.ItemTemplate>
+            </controls:ComboBox>
+            <Label FontAttributes="Bold" Text="Quantity" />
+            <HorizontalStackLayout Spacing="5">
+                <Entry
+                    x:Name="QuantityEntry"
+                    IsEnabled="{Binding EnableAddToOrder}"
+                    MinimumWidthRequest="150"
+                    Text="{Binding SelectedOrderItem.Quantity}">
+                    <Entry.Behaviors>
+                        <toolkit:SelectAllTextBehavior />
+                        <toolkit:NumericValidationBehavior />
+                    </Entry.Behaviors>
+                </Entry>
+                <Label Text="{Binding SelectedUnitType.UnitName}" VerticalOptions="End" />
+            </HorizontalStackLayout>
+            <Button
+                Command="{Binding AddToOrderCommand}"
+                HorizontalOptions="Start"
+                IsEnabled="{Binding EnableAddToOrder}"
+                Text="Add Item to Order">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="{Binding FontFamily}"
+                        Glyph="{x:Static helpers:FontAwesomeHelper.Plus}"
+                        Size="25" />
+                </Button.ImageSource>
+            </Button>
+        </VerticalStackLayout>
+
+        <CollectionView
+            x:Name="ResultsCollectionView"
+            Grid.Row="1"
+            EmptyView="There aren't any items in this order"
+            IsEnabled="{Binding EnableAddToOrder}"
+            ItemsSource="{Binding ItemsQuery}"
+            SelectedItem="{Binding SelectedOrderItem}"
+            SelectionMode="None">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="datasource:OrderItemsQuery">
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem
+                                    BackgroundColor="Red"
+                                    Command="{Binding Path=BindingContext.RemoveFromOrderCommand, Source={x:Reference this}}"
+                                    CommandParameter="{Binding .}"
+                                    Text="Remove">
+                                    <SwipeItem.IconImageSource>
+                                        <FontImageSource
+                                            FontFamily="free-regular-400"
+                                            Glyph="{x:Static helpers:FontAwesomeHelper.TrashCan}"
+                                            Size="25" />
+                                    </SwipeItem.IconImageSource>
+                                </SwipeItem>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Border Padding="8">
+                            <Grid RowDefinitions="Auto,Auto,*">
+                                <Label
+                                    Grid.Row="0"
+                                    FontAttributes="Bold"
+                                    Text="{Binding TaskCode}" />
+                                <HorizontalStackLayout Grid.Row="1" Spacing="3">
+                                    <Label Text="{Binding Quantity}" />
+                                    <Label Text="{Binding UnitName}" />
+                                </HorizontalStackLayout>
+                                <Label Grid.Row="2" Text="{Binding Name}" />
+                            </Grid>
+                            <FlyoutBase.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem
+                                        Command="{Binding Path=BindingContext.RemoveFromOrderCommand, Source={x:Reference this}}"
+                                        CommandParameter="{Binding .}"
+                                        Text="Remove">
+                                        <MenuFlyoutItem.IconImageSource>
+                                            <FontImageSource
+                                                FontFamily="free-regular-400"
+                                                Glyph="{x:Static helpers:FontAwesomeHelper.TrashCan}"
+                                                Size="25"
+                                                Color="{AppThemeBinding Light={StaticResource Black},
+                                                                        Dark={StaticResource White}}" />
+                                        </MenuFlyoutItem.IconImageSource>
+                                    </MenuFlyoutItem>
+                                </MenuFlyout>
+                            </FlyoutBase.ContextFlyout>
+                        </Border>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button
+            Grid.Row="2"
+            Command="{Binding ExportOrderCommand}"
+            HorizontalOptions="Start"
+            IsEnabled="{Binding EnableAddToOrder}"
+            Text="Export Order">
+            <Button.ImageSource>
+                <FontImageSource
+                    FontFamily="{Binding FontFamily}"
+                    Glyph="{x:Static helpers:FontAwesomeHelper.FilePdf}"
+                    Size="25" />
+            </Button.ImageSource>
+        </Button>
+    </Grid>
+</ContentPage>

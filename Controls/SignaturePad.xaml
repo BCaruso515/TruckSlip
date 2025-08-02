@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup
+    x:Class="TruckSlip.Controls.SignaturePad"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:TruckSlip.Controls"
+    xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+    x:DataType="local:SignaturePad">
+
+    <Grid
+        Padding="10"
+        BackgroundColor="AliceBlue"
+        ColumnDefinitions="*,*"
+        ColumnSpacing="15"
+        RowDefinitions="*, Auto"
+        RowSpacing="15">
+        <mct:DrawingView
+            x:Name="DrawBoard"
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Background="Transparent"
+            HeightRequest="180"
+            HorizontalOptions="Fill"
+            IsMultiLineModeEnabled="True"
+            LineColor="Black"
+            LineWidth="5"
+            Lines="{Binding Lines}"
+            ShouldClearOnFinish="False"
+            WidthRequest="640" />
+        <Button
+            x:Name="ClearButton"
+            Grid.Row="1"
+            Grid.Column="0"
+            Clicked="ClearButton_Clicked"
+            HorizontalOptions="Fill"
+            FontAttributes="Bold"
+            Text="Clear" />
+        <Button
+            x:Name="SubmitButton"
+            Grid.Row="1"
+            Grid.Column="1"
+            Clicked="SubmitButton_Clicked"
+            HorizontalOptions="Fill"
+            FontAttributes="Bold"
+            Text="Submit" />
+    </Grid>
+</mct:Popup>
