@@ -19,8 +19,9 @@ namespace TruckSlip.Data
         {
             await _connection.CreateTableAsync<UnitType>();
             await _connection.CreateTableAsync<Order>();
-            await _connection.CreateTableAsync<Jobsite>();
+            await _connection.CreateTableAsync<Company>();
 
+            await CreateJobsiteAsync();
             await CreateProductAsync();
             await CreateOrderItemAsync();
 
@@ -34,6 +35,7 @@ namespace TruckSlip.Data
             await _connection.DropTableAsync<Order>();
             await _connection.DropTableAsync<OrderItem>();
             await _connection.DropTableAsync<Jobsite>();
+            await _connection.DropTableAsync<Company>();
         }
         
         public async Task CloseDatabaseAsync()
@@ -173,6 +175,24 @@ namespace TruckSlip.Data
             await DeleteAsync(company);
 
         //Jobsite
+        private async Task<bool> CreateJobsiteAsync()
+        {
+            var sql = @"CREATE TABLE IF NOT EXISTS Jobsite(
+                      JobsiteId INTEGER PRIMARY KEY AUTOINCREMENT,
+                      Name TEXT NOT NULL,
+                      Address TEXT ,
+                      Address2 TEXT ,
+                      Contact TEXT ,
+                      Number TEXT ,
+                      CompanyId  INTEGER NOT NULL,
+                      FOREIGN KEY (CompanyId)
+                      REFERENCES Company(CompanyId)
+                      ON UPDATE CASCADE
+                      ON DELETE CASCADE)";
+
+            return Convert.ToBoolean(await _connection.ExecuteAsync(sql));
+        }
+
         public async Task<ObservableCollection<Jobsite>> GetJobsiteAsync()
             => await GetAsync<Jobsite>();
 

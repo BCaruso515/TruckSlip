@@ -2,6 +2,7 @@
 {
     public partial class OrderViewModel : BaseViewModel
     {
+        [ObservableProperty] private Company _selectedCompany = new();
         [ObservableProperty] private Jobsite _selectedJobsite = new();
         [ObservableProperty] private DateTime _selectedDate = DateTime.Today;
 
@@ -67,11 +68,23 @@
         {
             SetButtonText(false);
 
-            EnableAdd = await RefreshJobsiteAsync(Database);
+            EnableAdd = await RefreshCompanyAsync(Database);
+            if (!EnableAdd)
+            {
+                //Alert to add Company information
+                await Shell.Current.DisplayAlert("No Companies Found",
+                    "You must add a company before you can add an order.", "Ok");
+                EnableDelete = EnableEdit = false;
+                return;
+            }
+            SelectedCompany = Companies.First();
+
+            EnableAdd = await RefreshJobsiteAsync(Database, SelectedCompany.CompanyId);
             if (!EnableAdd)
             {
                 //Alert to add Jobsite information
-                await Shell.Current.DisplayAlert("Alert!", "Jobsite must be added to continue...", "Ok");
+                await Shell.Current.DisplayAlert("No Jobsite Found",
+                    "You must add a Jobsite before you can add an order.", "Ok");
                 EnableDelete = EnableEdit = false;
                 return;
             }

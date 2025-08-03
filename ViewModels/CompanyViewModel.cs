@@ -19,9 +19,7 @@ namespace TruckSlip.ViewModels
         public async Task Appearing()
         {
             SetButtonText(false);
-
-            EnableAdd = await RefreshCompanyAsync(Database);
-            if (!EnableAdd)
+            if (!await RefreshCompanyAsync(Database))
             {
                 EnableDelete = EnableEdit = false;
                 return;

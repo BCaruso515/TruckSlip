@@ -34,17 +34,15 @@ namespace TruckSlip.ViewModels
         [RelayCommand]
         public async Task SelectedCompanyChanged()
         { 
-            await RefreshJobsiteAsync(Database);
-            Jobsites = [..Jobsites
-                .Where(x => x.CompanyId == SelectedCompany.CompanyId)
-                .OrderBy(x => x.Name)];
-            if (Jobsites.Count == 0)
+            if (! await RefreshJobsiteAsync(Database, SelectedCompany.CompanyId))
             {
+                EnableDelete = EnableEdit = false;
                 SelectedJobsite = new();
                 return;
             }
 
             SelectedJobsite = Jobsites.First();
+            EnableDelete = EnableEdit = true;
         }
 
         [RelayCommand]
@@ -61,14 +59,7 @@ namespace TruckSlip.ViewModels
             }
             SelectedCompany = Companies.First();
 
-            if (!await RefreshJobsiteAsync(Database))
-            {
-                EnableDelete = EnableEdit = false;
-                return;
-            }
-
-            SelectedJobsite = Jobsites.First();
-            EnableDelete = EnableEdit = true;
+            await SelectedCompanyChanged();
         }
 
         [RelayCommand]
@@ -88,7 +79,7 @@ namespace TruckSlip.ViewModels
                     if (await Database.AddOrUpdateJobsiteAsync(SelectedJobsite))
                     {
                         SetButtonText(false);
-                        await RefreshJobsiteAsync(Database);
+                        await RefreshJobsiteAsync(Database, SelectedCompany.CompanyId);
                         SelectedJobsite = Jobsites.First();
                     }
                 }
@@ -113,7 +104,7 @@ namespace TruckSlip.ViewModels
                 else
                 {
                     SetButtonText(false);
-                    EnableDelete = EnableEdit = await RefreshJobsiteAsync(Database);
+                    EnableDelete = EnableEdit = await RefreshJobsiteAsync(Database, SelectedCompany.CompanyId);
 
                     if (_index > -1)
                         SelectedJobsite = Jobsites[_index];
@@ -136,7 +127,7 @@ namespace TruckSlip.ViewModels
                     "Yes", "No")) return;
 
                 await Database.DeleteJobsiteAsync(SelectedJobsite);
-                EnableDelete = EnableEdit = await RefreshJobsiteAsync(Database);
+                EnableDelete = EnableEdit = await RefreshJobsiteAsync(Database, SelectedCompany.CompanyId);
 
                 if (Jobsites.Count == 0)
                     return;

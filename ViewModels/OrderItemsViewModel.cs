@@ -86,9 +86,8 @@
         [RelayCommand]
         public async Task ExportOrder()
         {
-            if (! await RefreshJobsiteAsync(Database))
-                throw new Exception("Jobsite cannot be null!");
-            var jobsite = Jobsites.Where(x=> x.JobsiteId == SelectedOrder.JobsiteId).First();
+            var jobsites = await Database.GetJobsiteAsync();
+            var jobsite = jobsites.Where(x => x.JobsiteId == SelectedOrder.JobsiteId).First();
 
             if (! await RefreshCompanyAsync(Database))
                 throw new Exception("Company cannot be null!");

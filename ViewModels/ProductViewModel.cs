@@ -41,7 +41,8 @@
             EnableAdd = await RefreshUnitTypesAsync(Database);
             if (!EnableAdd)
             {
-                await Shell.Current.DisplayAlert("Alert!", "Unit Types must be added to continue...", "Ok");
+                await Shell.Current.DisplayAlert("No Unit Types Found",
+                    "You must add Unit Type before you can add a product.", "Ok");
                 EnableDelete = EnableEdit = false;
                 return;
             }

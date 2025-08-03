@@ -36,12 +36,14 @@
         protected async Task<bool> RefreshCompanyAsync(IDataService database)
         {
             Companies = await database.GetCompanyAsync();
+            Companies = [.. Companies.OrderBy(x => x.Name)];
             return Companies.Count > 0;
         }
 
-        protected async Task<bool> RefreshJobsiteAsync(IDataService database)
+        protected async Task<bool> RefreshJobsiteAsync(IDataService database, int id)
         {
             Jobsites = await database.GetJobsiteAsync();
+            Jobsites = [.. Jobsites.OrderBy(x => x.Name).Where(x => x.CompanyId == id)];
             return Jobsites.Count > 0;
         }
 
