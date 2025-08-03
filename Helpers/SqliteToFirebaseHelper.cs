@@ -57,6 +57,17 @@
             }
         }
 
+        public async Task SyncCompanyAsync()
+        {
+            var companies = await _inventoryDB.GetCompanyAsync();
+            var maxId = companies.Max(x => x.CompanyId);
+            await Database.SetNextId("Company", maxId + 1);
+            foreach (var company in companies)
+            {
+                await Database.AddCompanyAsync(company);
+            }
+        }
+
         public async Task SyncJobsiteAsync()
         {
             var jobsites = await _inventoryDB.GetJobsiteAsync();

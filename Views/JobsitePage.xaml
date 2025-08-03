@@ -53,10 +53,7 @@
             SelectedItem="{Binding SelectedJobsite}">
             <controls:ComboBox.ItemTemplate>
                 <DataTemplate x:DataType="datasource:Jobsite">
-                    <HorizontalStackLayout Spacing="5">
-                        <Label Text="{Binding Name}" />
-                        <Label Text="{Binding Number}" />
-                    </HorizontalStackLayout>
+                    <Label Text="{Binding Name}" />
                 </DataTemplate>
             </controls:ComboBox.ItemTemplate>
         </controls:ComboBox>

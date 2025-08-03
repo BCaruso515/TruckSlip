@@ -33,7 +33,7 @@
             Placeholder="Required"
             SelectedItem="{Binding SelectedProduct}">
             <controls:ComboBox.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="datasource:Product">
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="{Binding TaskCode}"/>
                         <Label Text="{Binding Name}"/>

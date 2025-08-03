@@ -2,16 +2,41 @@
 {
     public partial class OrderViewModel : BaseViewModel
     {
-        [ObservableProperty] private Company _selectedCompany = new();
-        [ObservableProperty] private Jobsite _selectedJobsite = new();
         [ObservableProperty] private DateTime _selectedDate = DateTime.Today;
 
+        private Jobsite _selectedJobsite = new();
+        private Company _selectedCompany = new();
         private Order _selectedOrder = new();
         private bool _isDelivery;
         private bool _isPickup;
         private int _index = -1;
         private readonly IDataServiceProvider _provider;
         private IDataService Database => _provider.Current;
+
+        public Company SelectedCompany
+        {
+            get => _selectedCompany;
+
+            set
+            {
+                if (_selectedCompany == value) return;
+                _selectedCompany = value;
+                Task.Run(async () => await SelectedCompanyChanged());
+                OnPropertyChanged();
+            }
+        }
+
+        public Jobsite SelectedJobsite
+        {
+            get => _selectedJobsite;
+            set
+            {
+                if (_selectedJobsite == value) return;
+                _selectedJobsite = value;
+                Task.Run(async () => await SelectedJobsiteChanged());
+                OnPropertyChanged();
+            }
+        }
 
         public Order SelectedOrder
         {
@@ -78,23 +103,41 @@
                 return;
             }
             SelectedCompany = Companies.First();
+            await SelectedCompanyChanged();            
 
-            EnableAdd = await RefreshJobsiteAsync(Database, SelectedCompany.CompanyId);
-            if (!EnableAdd)
+            if (!await RefreshOrdersAsync(Database, SelectedJobsite.JobsiteId))
             {
-                //Alert to add Jobsite information
-                await Shell.Current.DisplayAlert("No Jobsite Found",
-                    "You must add a Jobsite before you can add an order.", "Ok");
                 EnableDelete = EnableEdit = false;
                 return;
             }
+            SelectedOrder = Orders.First();
+            EnableDelete = EnableEdit = true;
+        }
+
+        [RelayCommand]
+        public async Task SelectedCompanyChanged()
+        {
+            if (!await RefreshJobsiteAsync(Database, SelectedCompany.CompanyId))
+            {
+                EnableDelete = EnableEdit = false;
+                SelectedJobsite = new();
+                return;
+            }
+
             SelectedJobsite = Jobsites.First();
+            EnableDelete = EnableEdit = true;
+        }
 
-            if (!await RefreshOrdersAsync(Database))
+        [RelayCommand]
+        public async Task SelectedJobsiteChanged()
+        {
+            if (!await RefreshOrdersAsync(Database, SelectedJobsite.JobsiteId))
             {
                 EnableDelete = EnableEdit = false;
+                SelectedOrder = new();
                 return;
             }
+
             SelectedOrder = Orders.First();
             EnableDelete = EnableEdit = true;
         }
@@ -118,7 +161,7 @@
                     if (await Database.AddOrUpdateOrderAsync(SelectedOrder))
                     {
                         SetButtonText(false);
-                        EnableDelete = EnableEdit = await RefreshOrdersAsync(Database);
+                        EnableDelete = EnableEdit = await RefreshOrdersAsync(Database, SelectedJobsite.JobsiteId);
                         SelectedOrder = Orders.Where(x => x.OrderId == SelectedOrder.OrderId).First();
                     }
                 }
@@ -143,7 +186,7 @@
                 else
                 {
                     SetButtonText(false);
-                    EnableDelete = EnableEdit = await RefreshOrdersAsync(Database);
+                    EnableDelete = EnableEdit = await RefreshOrdersAsync(Database, SelectedJobsite.JobsiteId);
 
                     if (_index > -1)
                         SelectedOrder = Orders[_index];
@@ -166,7 +209,7 @@
                     "Yes", "No")) return;
 
                 await Database.DeleteOrderAsync(SelectedOrder);
-                EnableDelete = EnableEdit = await RefreshOrdersAsync(Database);
+                EnableDelete = EnableEdit = await RefreshOrdersAsync(Database, SelectedJobsite.JobsiteId);
 
                 if (Orders.Count == 0)
                     return;

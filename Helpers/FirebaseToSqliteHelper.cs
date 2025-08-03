@@ -53,6 +53,16 @@
             }
         }
 
+        public async Task SyncCompanyAsync()
+        {
+            var companies = await Database.GetCompanyAsync();
+            if (companies == null || !companies.Any()) return;
+            foreach (var company in companies)
+            {
+                await _inventoryDB.AddCompanyAsync(company);
+            }
+        }
+
         public async Task SyncJobsiteAsync()
         {
             var jobsites = await Database.GetJobsiteAsync();
@@ -65,6 +75,7 @@
 
         private async Task SyncAllAsync()
         {
+            await SyncCompanyAsync();
             await SyncJobsiteAsync();
             await SyncUnitTypesAsync();
             await SyncProductsAsync();

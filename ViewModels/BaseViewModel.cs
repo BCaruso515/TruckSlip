@@ -61,10 +61,10 @@
             return UnitTypes.Count != 0;
         }
 
-        protected async Task<bool> RefreshOrdersAsync(IDataService database)
+        protected async Task<bool> RefreshOrdersAsync(IDataService database, int id)
         {
             Orders = await database.GetOrderAsync();
-            Orders = [.. Orders.OrderByDescending(x => Convert.ToDateTime(x.Date))];
+            Orders = [.. Orders.Where(x=> x.JobsiteId == id).OrderByDescending(x => Convert.ToDateTime(x.Date))];
             return Orders.Count != 0;
         }
 

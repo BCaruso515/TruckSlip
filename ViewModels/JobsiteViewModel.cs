@@ -21,8 +21,7 @@ namespace TruckSlip.ViewModels
                 _selectedCompany = value;
                 Task.Run(async() => await SelectedCompanyChanged());
                 OnPropertyChanged();
-            } 
-        
+            }         
         }
 
         public JobsiteViewModel(IDataServiceProvider provider)

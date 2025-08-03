@@ -56,7 +56,6 @@ namespace TruckSlip.ViewModels
                 if (Database == null) throw new Exception("Database Error");
 
                 await Database.InitializeDatabaseAsync();
-                //await ClearSignaturesAsync(Database);
 
                 _isDatabaseConnected = true;
             }
@@ -106,8 +105,8 @@ namespace TruckSlip.ViewModels
                 {
                     File.Copy(result.FullPath, _sqliteDbPath, true);
                     await Database.InitializeDatabaseAsync();
-                    FirebaseToSqliteHelper helper = new(_provider);
-                    await helper.CreateBackupAsync();
+                    SqliteToFirebaseHelper helper = new(_provider);
+                    await helper.SyncAllAsync();
                 }
                 else
                 {
@@ -150,7 +149,16 @@ namespace TruckSlip.ViewModels
 
             string newFileName = await GetFileName(Path.GetFileNameWithoutExtension(dataLocation));
             File.Copy(dataLocation, Path.Combine(result.Folder.Path, $"{newFileName}.db3"), true);
-            await Toast.Make("Data backup successful", ToastDuration.Short).Show(cancellationToken);
+            try
+            {
+                await Toast.Make("Data backup successful", ToastDuration.Short).Show(cancellationToken);
+            }
+            catch 
+            {
+                await Shell.Current.DisplayAlert("", "Data backup successful", "OK");
+                return;
+            }   
+            
 #else
             await Task.CompletedTask;
 #endif
