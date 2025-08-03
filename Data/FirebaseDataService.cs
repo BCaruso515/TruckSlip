@@ -280,7 +280,15 @@ namespace TruckSlip.Data
         public async Task<bool> AddCompanyAsync(Company company)
             => await AddAsync(company, "Company");
         public async Task<bool> DeleteCompanyAsync(Company company)
-            => await DeleteAsync(company, "Company", nameof(Company.CompanyId));
+        {
+            var jobsites = await GetJobsiteAsync();
+            var jobsitesToDelete = jobsites.Where(x => x.CompanyId == company.CompanyId).ToList();
+            foreach (var jobsite in jobsitesToDelete)
+            {
+                await DeleteJobsiteAsync(jobsite);
+            }
+            return await DeleteAsync(company, "Company", nameof(Company.CompanyId));
+        }
 
         // Jobsite
         public async Task<ObservableCollection<Jobsite>> GetJobsiteAsync()
@@ -290,7 +298,15 @@ namespace TruckSlip.Data
         public async Task<bool> AddJobsiteAsync(Jobsite jobsite)
             => await AddAsync(jobsite, "Jobsite");
         public async Task<bool> DeleteJobsiteAsync(Jobsite jobsite)
-            => await DeleteAsync(jobsite, "Jobsite", nameof(Jobsite.JobsiteId));
+        {
+            var orders = await GetOrderAsync();
+            var ordersToDelete = orders.Where(x => x.JobsiteId == jobsite.JobsiteId).ToList();
+            foreach (var order in ordersToDelete)
+            {
+                await DeleteOrderAsync(order);
+            }
+            return await DeleteAsync(jobsite, "Jobsite", nameof(Jobsite.JobsiteId));
+        }
 
         // OrderItemsQuery
         public async Task<ObservableCollection<OrderItemsQuery>> GetOrderItemsQueryAsync()
