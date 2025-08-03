@@ -7,6 +7,7 @@
         [ObservableProperty] private static ObservableCollection<UnitType> unitTypes = [];
         [ObservableProperty] private static ObservableCollection<InventoryType> inventoryTypes = [];
         [ObservableProperty] private static ObservableCollection<Jobsite> jobsites = [];
+        [ObservableProperty] private static ObservableCollection<Company> companies = new();
         [ObservableProperty] private static ObservableCollection<OrderItemsQuery> itemsQuery = [];
 
 
@@ -30,6 +31,12 @@
             ];
             InventoryTypes = [.. InventoryTypes.OrderBy(x => x.TypeName)];
             return InventoryTypes.Count != 0;
+        }
+
+        protected async Task<bool> RefreshCompanyAsync(IDataService database)
+        {
+            Companies = await database.GetCompanyAsync();
+            return Companies.Count > 0;
         }
 
         protected async Task<bool> RefreshJobsiteAsync(IDataService database)

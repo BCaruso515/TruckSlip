@@ -28,6 +28,7 @@ namespace TruckSlip.Data
                 CreateTableAsync("Product"),
                 CreateTableAsync("Order"),
                 CreateTableAsync("OrderItem"),
+                CreateTableAsync("Company"),
                 CreateTableAsync("Jobsite")
             };
             await Task.WhenAll(tasks);
@@ -42,6 +43,7 @@ namespace TruckSlip.Data
                 CreateTableAsync("Order"),
                 CreateTableAsync("OrderItem"),
                 CreateTableAsync("Jobsite"),
+                CreateTableAsync("Company"),
                 DeleteTableAsync("Tables")
             };
             await Task.WhenAll(tasks);
@@ -269,6 +271,16 @@ namespace TruckSlip.Data
             => await AddAsync(orderItem, "OrderItem");
         public async Task<bool> DeleteOrderItemAsync(OrderItem orderItem)
             => await DeleteAsync(orderItem, "OrderItem", nameof(OrderItem.OrderItemId));
+
+        // Company
+        public async Task<ObservableCollection<Company>> GetCompanyAsync()
+            => await GetAllAsync<Company>("Company");
+        public async Task<bool> AddOrUpdateCompanyAsync(Company company)
+            => await AddOrUpdateAsync(company, "Company", nameof(Company.CompanyId));
+        public async Task<bool> AddCompanyAsync(Company company)
+            => await AddAsync(company, "Company");
+        public async Task<bool> DeleteCompanyAsync(Company company)
+            => await DeleteAsync(company, "Company", nameof(Company.CompanyId));
 
         // Jobsite
         public async Task<ObservableCollection<Jobsite>> GetJobsiteAsync()

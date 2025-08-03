@@ -88,9 +88,13 @@
         {
             if (! await RefreshJobsiteAsync(Database))
                 throw new Exception("Jobsite cannot be null!");
-            var jobsite = Jobsites.First();
+            var jobsite = Jobsites.Where(x=> x.JobsiteId == SelectedOrder.JobsiteId).First();
 
-            var orderReport = new OrderReport(jobsite, SelectedOrder, ItemsQuery);
+            if (! await RefreshCompanyAsync(Database))
+                throw new Exception("Company cannot be null!");
+            var company = Companies.Where(x => x.CompanyId == jobsite.CompanyId).First(); 
+
+            var orderReport = new OrderReport(company, jobsite, SelectedOrder, ItemsQuery);
             orderReport.GeneratePdfAndShow();
         }
     }

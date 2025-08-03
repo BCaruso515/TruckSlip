@@ -25,6 +25,18 @@
         <ShellContent ContentTemplate="{DataTemplate views:HomePage}" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Company" Route="CompanyPage">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="free-solid-900"
+                Glyph="{x:Static helpers:FontAwesomeHelper.BuildingColumns}"
+                Size="25"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate views:CompanyPage}" />
+    </FlyoutItem>
+
     <FlyoutItem Title="Jobsite" Route="JobsitePage">
         <FlyoutItem.Icon>
             <FontImageSource

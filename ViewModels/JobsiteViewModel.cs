@@ -53,24 +53,6 @@
             { await Shell.Current.DisplayAlert("Error!", ex.Message, "Ok"); }
         }
 
-        [RelayCommand]
-        public async Task UploadLogo()
-        {
-            var result = await FilePicker.PickAsync(new PickOptions 
-            { 
-                PickerTitle = "Upload Logo Image",
-                FileTypes = FilePickerFileType.Images            
-            });
-
-            if (result == null) return;
-            using Stream stream = await result.OpenReadAsync();
-
-            MemoryStream memoryStream = new();
-            stream.CopyTo(memoryStream);
-            SelectedJobsite.Logo = memoryStream.ToArray();
-            OnPropertyChanged(nameof(SelectedJobsite));
-        }
-
         private void VerifyInput()
         {
             if (string.IsNullOrWhiteSpace(SelectedJobsite.Name)) throw new Exception("Jobsite name can not be blank");

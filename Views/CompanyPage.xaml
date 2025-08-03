@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    x:Class="TruckSlip.Views.CompanyPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:TruckSlip.Controls"
+    xmlns:datasource="clr-namespace:TruckSlip.Models"
+    xmlns:helpers="clr-namespace:TruckSlip.Helpers"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:TruckSlip.ViewModels"
+    x:Name="this"
+    Title="Company"
+    x:DataType="vm:CompanyViewModel">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+        BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+        Command="{Binding AppearingCommand}"
+        EventName="Appearing" />
+    </ContentPage.Behaviors>
+
+    <Grid
+    Padding="15"
+    RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+    RowSpacing="8">
+        <Label FontAttributes="Bold" Text="Company Name" />
+        <controls:ComboBox
+            DisplayMember="Name"
+            IsVisible="{Binding EnableDelete}"
+            ItemSource="{Binding Companies}"
+            Placeholder="Required"
+            SelectedItem="{Binding SelectedCompany}">
+            <controls:ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="datasource:Company">
+                    <Label Text="{Binding Name}"/>
+                </DataTemplate>
+            </controls:ComboBox.ItemTemplate>
+        </controls:ComboBox>        
+        <Entry
+        x:Name="NameEntry"
+        Grid.Row="1"
+        IsVisible="{Binding IsEnabled}" 
+        MinimumWidthRequest="150"
+        Text="{Binding SelectedCompany.Name}">
+            <Entry.Behaviors>
+                <toolkit:SelectAllTextBehavior />
+            </Entry.Behaviors>
+        </Entry>
+        <Label
+        Grid.Row="2"
+        FontAttributes="Bold"
+        Text="Address" />
+        <Entry
+        Grid.Row="3"
+        IsEnabled="{Binding IsEnabled}"
+        MinimumWidthRequest="150"
+        Text="{Binding SelectedCompany.Address}">
+            <Entry.Behaviors>
+                <toolkit:SelectAllTextBehavior />
+            </Entry.Behaviors>
+        </Entry>
+        <Label
+        Grid.Row="4"
+        FontAttributes="Bold"
+        Text="Address 2" />
+        <Entry
+        Grid.Row="5"
+        IsEnabled="{Binding IsEnabled}"
+        MinimumWidthRequest="150"
+        Text="{Binding SelectedCompany.Address2}">
+            <Entry.Behaviors>
+                <toolkit:SelectAllTextBehavior />
+            </Entry.Behaviors>
+        </Entry>
+
+        <Label
+        Grid.Row="6"
+        FontAttributes="Bold"
+        Text="Phone Number" />
+        <Entry
+        Grid.Row="7"
+        IsEnabled="{Binding IsEnabled}"
+        MinimumWidthRequest="150"
+        Text="{Binding SelectedCompany.Phone}">
+            <Entry.Behaviors>
+                <toolkit:SelectAllTextBehavior />
+                <toolkit:MaskedBehavior Mask="(XXX)-XXX-XXXX" />
+            </Entry.Behaviors>
+        </Entry>
+        <Label
+        Grid.Row="8"
+        FontAttributes="Bold"
+        Text="Company Logo" />
+        <Image
+        Grid.Row="9"
+        HorizontalOptions="Start"
+        MaximumHeightRequest="95"
+        MaximumWidthRequest="412"
+        Source="{Binding SelectedCompany.Logo, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
+        <Button
+        Grid.Row="10"
+        Command="{Binding UploadLogoCommand}"
+        CommandParameter="{Reference NameEntry}"
+        IsEnabled="{Binding IsEnabled}"
+        Text="Upload Logo">
+            <Button.ImageSource>
+                <FontImageSource
+                FontFamily="{Binding FontFamily}"
+                Glyph="{x:Static helpers:FontAwesomeHelper.Upload}"
+                Size="25" />
+            </Button.ImageSource>
+        </Button>
+
+        <HorizontalStackLayout Spacing="5" Grid.Row="11">
+            <Button
+                Command="{Binding EditSaveCommand}"
+                CommandParameter="{Reference NameEntry}"
+                IsEnabled="{Binding EnableEdit}"
+                Text="{Binding EditSaveButtonText}">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="{Binding FontFamily}"
+                        Glyph="{Binding EditSaveImage}"
+                        Size="25" />
+                </Button.ImageSource>
+            </Button>
+            <Button
+                Command="{Binding AddCancelCommand}"
+                CommandParameter="{Reference NameEntry}"
+                IsEnabled="{Binding EnableAdd}"
+                Text="{Binding AddCancelButtonText}">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="{Binding FontFamily}"
+                        Glyph="{Binding AddCancelImage}"
+                        Size="25" />
+                </Button.ImageSource>
+            </Button>
+            <Button
+                Command="{Binding DeleteCommand}"
+                IsEnabled="{Binding EnableDelete}"
+                Text="Delete">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="{Binding FontFamily}"
+                        Glyph="{Binding DeleteImage}"
+                        Size="25" />
+                </Button.ImageSource>
+            </Button>
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

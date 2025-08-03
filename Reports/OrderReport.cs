@@ -10,14 +10,16 @@ namespace TruckSlip.Reports
     public class OrderReport
     {
         private readonly Jobsite _jobsite;
+        private readonly Company _company;
         private readonly Order _order;
         private readonly IList<OrderItemsQuery> _dataSource;
         private readonly string source = Path.Combine(FileSystem.CacheDirectory, "temp1.pdf");
         private readonly string destination = Path.Combine(FileSystem.CacheDirectory, "temp.pdf");
 
-        public OrderReport(Jobsite jobsite, Order order, IList<OrderItemsQuery> orderItems)
+        public OrderReport(Company company, Jobsite jobsite, Order order, IList<OrderItemsQuery> orderItems)
         {
             _jobsite = jobsite;
+            _company = company;
             _order = order;
             _dataSource = orderItems;
             _dataSource = [.. _dataSource.OrderBy(x => x.TaskCode)];
@@ -154,8 +156,8 @@ namespace TruckSlip.Reports
 
         private Image? GetLogo()
         {
-            if (_jobsite.Logo == null) return null;
-            ImageData imageData = ImageDataFactory.Create(_jobsite.Logo);
+            if (_company.Logo == null) return null;
+            ImageData imageData = ImageDataFactory.Create(_company.Logo);
             Image image = new Image(imageData)
                 .SetWidth(182F)
                 .SetHeight(42F)

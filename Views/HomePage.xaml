@@ -38,6 +38,18 @@
                 Wrap="Wrap">
                 <Button
                     Command="{Binding NavigateToPageCommand}"
+                    CommandParameter="CompanyPage"
+                    Style="{StaticResource Key=ImageTextButton}"
+                    Text="Company">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="{Binding FontFamily}"
+                            Glyph="{x:Static helpers:FontAwesomeHelper.BuildingColumns}"
+                            Size="40" />
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Command="{Binding NavigateToPageCommand}"
                     CommandParameter="JobsitePage"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Jobsite">

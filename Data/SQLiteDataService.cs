@@ -159,6 +159,19 @@ namespace TruckSlip.Data
         public async Task<bool> DeleteOrderItemAsync(OrderItem orderItem) =>
             await DeleteAsync(orderItem);
 
+        //Company
+        public async Task<ObservableCollection<Company>> GetCompanyAsync()
+            => await GetAsync<Company>();
+
+        public async Task<bool> AddOrUpdateCompanyAsync(Company company)
+            => await AddOrUpdateAsync(company);
+
+        public async Task<bool> AddCompanyAsync(Company company)
+            => await AddAsync(company);
+
+        public async Task<bool> DeleteCompanyAsync(Company company) =>
+            await DeleteAsync(company);
+
         //Jobsite
         public async Task<ObservableCollection<Jobsite>> GetJobsiteAsync()
             => await GetAsync<Jobsite>();

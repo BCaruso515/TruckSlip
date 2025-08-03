@@ -34,7 +34,7 @@
         public async Task Appearing()
         {
             SetButtonText(false);
-            
+
             if (RefreshInventoryTypes())
                 SelectedType = InventoryTypes.First();
 
@@ -45,9 +45,9 @@
                 EnableDelete = EnableEdit = false;
                 return;
             }
-                
+
             SelectedUnit = UnitTypes.First();
-                
+
             if (!await RefreshProductsAsync(Database))
             {
                 EnableDelete = EnableEdit = false;

@@ -32,6 +32,12 @@
         Task<bool> AddOrderItemAsync(OrderItem orderItem);
         Task<bool> DeleteOrderItemAsync(OrderItem orderItem);
 
+        //Company
+        Task<ObservableCollection<Company>> GetCompanyAsync();
+        Task<bool> AddOrUpdateCompanyAsync(Company company);
+        Task<bool> AddCompanyAsync(Company company);
+        Task<bool> DeleteCompanyAsync(Company company);
+
         //Jobsite
         Task<ObservableCollection<Jobsite>> GetJobsiteAsync();
         Task<bool> AddOrUpdateJobsiteAsync(Jobsite jobsite);
