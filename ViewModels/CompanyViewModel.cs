@@ -122,7 +122,7 @@ namespace TruckSlip.ViewModels
 
             if (SelectedCompany.CompanyId == 0 && result)
             {
-                throw new Exception($"The unit \"{SelectedCompany.Name}\" already exists. " +
+                throw new Exception($"The Company \"{SelectedCompany.Name}\" already exists. " +
                                     $"Company names must be unique.");
             }
         }
