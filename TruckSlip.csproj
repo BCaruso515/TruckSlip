@@ -60,14 +60,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <None Remove="appsettings.json" />
     <None Remove="Platforms\iOS\GoogleService-Info.plist" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -88,6 +81,12 @@
     <MauiXaml Update="Views\CompanyPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
