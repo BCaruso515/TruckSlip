@@ -29,7 +29,8 @@
                     DisplayMember="Name"
                     ItemSource="{Binding Companies}"
                     Placeholder="Required"
-                    SelectedItem="{Binding SelectedCompany}">
+                    SelectedItem="{Binding SelectedCompany}"
+                    SelectionChangedCommand="{Binding SelectedCompanyChangedCommand}">
                     <controls:ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="datasource:Company">
                             <Label Text="{Binding Name}" />
@@ -41,7 +42,8 @@
                     DisplayMember="Name"
                     ItemSource="{Binding Jobsites}"
                     Placeholder="Required"
-                    SelectedItem="{Binding SelectedJobsite}">
+                    SelectedItem="{Binding SelectedJobsite}"
+                    SelectionChangedCommand="{Binding SelectedJobsiteChangedCommand}">
                     <controls:ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="datasource:Jobsite">
                             <Label Text="{Binding Name}" />
@@ -53,7 +55,8 @@
                     DisplayMember="Date"
                     ItemSource="{Binding Orders}"
                     Placeholder="Required"
-                    SelectedItem="{Binding SelectedOrder}">
+                    SelectedItem="{Binding SelectedOrder}"
+                    SelectionChangedCommand="{Binding SelectedOrderChangedCommand}">
                     <controls:ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="datasource:Order">
                             <Label Text="{Binding Date}" />
@@ -69,13 +72,29 @@
                     <Label Text="Delivery" VerticalOptions="Center" />
                     <CheckBox
                         IsChecked="{Binding IsDelivery}"
-                        IsEnabled="{Binding IsEnabled}"
-                        VerticalOptions="Center" />
+                        IsEnabled="{Binding IsEnabled}" 
+                        VerticalOptions="Center">
+                        <CheckBox.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+                                EventName="CheckedChanged"
+                                CommandParameter="IsDelivery"
+                                Command="{Binding CheckboxChangedCommand}"/>
+                        </CheckBox.Behaviors>
+                    </CheckBox>
                     <Label Text="Pickup" VerticalOptions="Center" />
                     <CheckBox
                         IsChecked="{Binding IsPickup}"
                         IsEnabled="{Binding IsEnabled}"
-                        VerticalOptions="Center" />
+                        VerticalOptions="Center" >
+                        <CheckBox.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+                                EventName="CheckedChanged"
+                                CommandParameter="IsPickup"
+                                Command="{Binding CheckboxChangedCommand}"/>
+                        </CheckBox.Behaviors>
+                    </CheckBox>
                 </HorizontalStackLayout>
                 <Editor
                     AutoSize="TextChanges"

@@ -4,25 +4,11 @@
     {
         [ObservableProperty] private UnitType _selectedUnit = new();
         [ObservableProperty] private InventoryType _selectedType = new();
+        [ObservableProperty] private Product _selectedProduct = new();
 
-        private Product _selectedProduct = new();
         private int _index = -1;
         private readonly IDataServiceProvider _provider;
         private IDataService Database => _provider.Current;
-
-        public Product SelectedProduct
-        {
-            get => _selectedProduct;
-            set
-            {
-                if (_selectedProduct == value) return;
-                _selectedProduct = value;
-
-                SetUnitType();
-                SetInventoryType();
-                OnPropertyChanged();
-            }
-        }
 
         public ProductViewModel(IDataServiceProvider provider)
         {
@@ -42,7 +28,7 @@
             if (!EnableAdd)
             {
                 await Shell.Current.DisplayAlert("No Unit Types Found",
-                    "You must add Unit Type before you can add a product.", "Ok");
+                    "You must add Unit Type before you can add an item.", "Ok");
                 EnableDelete = EnableEdit = false;
                 return;
             }
@@ -57,6 +43,13 @@
 
             SelectedProduct = Products.First();
             EnableDelete = EnableEdit = true;
+        }
+
+        [RelayCommand]
+        public void SelectedProductChanged()
+        {
+            SetUnitType();
+            SetInventoryType();
         }
 
         [RelayCommand]

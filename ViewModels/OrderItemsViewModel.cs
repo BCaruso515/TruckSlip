@@ -3,28 +3,14 @@
     [QueryProperty(nameof(SelectedOrder), "SelectedOrder")]
     public partial class OrderItemsViewModel : BaseViewModel
     {
+        [ObservableProperty] private Product _selectedProduct = new();
         [ObservableProperty] private OrderItem _selectedOrderItem = new();
         [ObservableProperty] private UnitType _selectedUnitType = new();
         [ObservableProperty] private Order _selectedOrder = new();
         [ObservableProperty] bool _enableAddToOrder;
 
-        private Product _selectedProduct = new();
         private readonly IDataServiceProvider _provider;
         private IDataService Database => _provider.Current;
-
-        public Product SelectedProduct
-        {
-            get => _selectedProduct;
-            set
-            {
-                if (value.ProductId == 0) return;
-                _selectedProduct = value;
-                SelectedUnitType = UnitTypes.First(UnitTypes => UnitTypes.UnitId == _selectedProduct.UnitId);
-                SelectedOrderItem.Quantity = 1;
-                OnPropertyChanged(nameof(SelectedOrderItem));
-                OnPropertyChanged(nameof(SelectedProduct));
-            }
-        }
 
         public OrderItemsViewModel(IDataServiceProvider provider)
         {
@@ -58,7 +44,17 @@
 
             await RefreshItemsQueryAsync(Database, SelectedOrder.OrderId);
         }
-        
+
+        [RelayCommand]
+        public void SelectedProductChanged()
+        {
+            if (SelectedProduct == null || SelectedProduct.ProductId == 0) return;
+
+            SelectedUnitType = UnitTypes.First(UnitTypes => UnitTypes.UnitId == SelectedProduct.UnitId);
+            SelectedOrderItem.Quantity = 1;
+            OnPropertyChanged(nameof(SelectedOrderItem));
+        }
+
         [RelayCommand]
         public async Task AddToOrder()
         {

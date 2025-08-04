@@ -81,11 +81,12 @@
 
         public async Task SyncAllAsync()
         {
+            await SyncCompanyAsync();
             await SyncJobsiteAsync();
             await SyncUnitTypesAsync();
             await SyncProductsAsync();
             await SyncOrderAsync();
-            await SyncOrderItemAsync();
+            await SyncOrderItemAsync();            
         }
     }
 }

@@ -41,6 +41,7 @@ public partial class ComboBox : ContentView
                 if (value != null)
                 {
                     controls.displayLabel.Text = value.ToString();
+                    controls.SelectionChangedCommand?.Execute(null);
                 }
             }
         }
@@ -82,6 +83,20 @@ public partial class ComboBox : ContentView
     {
         get => (IEnumerable)GetValue(ItemSourceProperty);
         set => SetValue(ItemSourceProperty, value);
+    }
+
+    //public event EventHandler<EventArgs>? SelectionChangedEvent;
+
+    public static readonly BindableProperty SelectionChangedCommandProperty = BindableProperty.Create(
+       propertyName: nameof(SelectionChangedCommand),
+       returnType: typeof(ICommand),
+       declaringType: typeof(ComboBox),
+       defaultBindingMode: BindingMode.TwoWay);
+
+    public ICommand SelectionChangedCommand
+    {
+        get => (ICommand)GetValue(SelectionChangedCommandProperty);
+        set => SetValue(SelectionChangedCommandProperty, value);
     }
 
     public event EventHandler<EventArgs>? OpenComboBoxEvent;

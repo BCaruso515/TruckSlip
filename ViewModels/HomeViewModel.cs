@@ -171,6 +171,7 @@ namespace TruckSlip.ViewModels
             {
                 if (!await Shell.Current.DisplayAlert("WARNING!",
                     "This will delete all application data. " +
+                    "This includes all orders, unit types, jobsites, companies, and inventory. " +
                     "Are you sure you want to proceed? This action can not be undone.",
                     "Yes", "No")) return;
 

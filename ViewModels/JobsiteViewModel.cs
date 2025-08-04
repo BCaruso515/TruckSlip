@@ -5,24 +5,11 @@ namespace TruckSlip.ViewModels
     public partial class JobsiteViewModel: BaseViewModel
     {
         [ObservableProperty] private Jobsite _selectedJobsite = new();
+        [ObservableProperty] private Company _selectedCompany = new();
 
-        private Company _selectedCompany = new();
         private readonly IDataServiceProvider _provider;
         private IDataService Database => _provider.Current;
         private int _index = -1;
-
-        public Company SelectedCompany 
-        { 
-            get => _selectedCompany;
-
-            set
-            {
-                if (_selectedCompany == value) return;
-                _selectedCompany = value;
-                Task.Run(async() => await SelectedCompanyChanged());
-                OnPropertyChanged();
-            }         
-        }
 
         public JobsiteViewModel(IDataServiceProvider provider)
         {
@@ -57,8 +44,6 @@ namespace TruckSlip.ViewModels
                 return;
             }
             SelectedCompany = Companies.First();
-
-            await SelectedCompanyChanged();
         }
 
         [RelayCommand]

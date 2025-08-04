@@ -31,6 +31,7 @@
             IsEnabled="{Binding EnableDelete}"
             ItemSource="{Binding Products}"
             Placeholder="Required"
+            SelectionChangedCommand="{Binding SelectedProductChangedCommand}"
             SelectedItem="{Binding SelectedProduct}">
             <controls:ComboBox.ItemTemplate>
                 <DataTemplate x:DataType="datasource:Product">

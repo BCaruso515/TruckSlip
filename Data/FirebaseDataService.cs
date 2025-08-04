@@ -38,12 +38,12 @@ namespace TruckSlip.Data
         {
             var tasks = new List<Task>
             {
-                DeleteTableAsync("UnitType"),
+                DeleteTableAsync("OrderItem"),
+                DeleteTableAsync("Order"),
                 DeleteTableAsync("Product"),
-                CreateTableAsync("Order"),
-                CreateTableAsync("OrderItem"),
-                CreateTableAsync("Jobsite"),
-                CreateTableAsync("Company"),
+                DeleteTableAsync("UnitType"),
+                DeleteTableAsync("Jobsite"),
+                DeleteTableAsync("Company"),
                 DeleteTableAsync("Tables")
             };
             await Task.WhenAll(tasks);

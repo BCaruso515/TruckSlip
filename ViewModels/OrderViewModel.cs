@@ -3,84 +3,15 @@
     public partial class OrderViewModel : BaseViewModel
     {
         [ObservableProperty] private DateTime _selectedDate = DateTime.Today;
+        [ObservableProperty] private Jobsite _selectedJobsite = new();
+        [ObservableProperty] private Company _selectedCompany = new();
+        [ObservableProperty] private Order _selectedOrder = new();
+        [ObservableProperty] private bool _isDelivery;
+        [ObservableProperty] private bool _isPickup;
 
-        private Jobsite _selectedJobsite = new();
-        private Company _selectedCompany = new();
-        private Order _selectedOrder = new();
-        private bool _isDelivery;
-        private bool _isPickup;
-        private int _index = -1;
         private readonly IDataServiceProvider _provider;
         private IDataService Database => _provider.Current;
-
-        public Company SelectedCompany
-        {
-            get => _selectedCompany;
-
-            set
-            {
-                if (_selectedCompany == value) return;
-                _selectedCompany = value;
-                Task.Run(async () => await SelectedCompanyChanged());
-                OnPropertyChanged();
-            }
-        }
-
-        public Jobsite SelectedJobsite
-        {
-            get => _selectedJobsite;
-            set
-            {
-                if (_selectedJobsite == value) return;
-                _selectedJobsite = value;
-                Task.Run(async () => await SelectedJobsiteChanged());
-                OnPropertyChanged();
-            }
-        }
-
-        public Order SelectedOrder
-        {
-            get => _selectedOrder;
-            set
-            {
-                if (value == null) return;
-                _selectedOrder = value;
-                OnPropertyChanged(nameof(SelectedOrder));
-                
-                IsDelivery = Convert.ToBoolean(_selectedOrder.OrderTypeId);
-                OnPropertyChanged(nameof(IsDelivery));
-
-                if (! string.IsNullOrEmpty(_selectedOrder.Date))
-                    SelectedDate = Convert.ToDateTime(_selectedOrder.Date);
-                OnPropertyChanged(nameof(SelectedDate));
-            }
-        }
-
-        public bool IsDelivery
-        {
-            get => _isDelivery;
-            set
-            { 
-                if (value == _isDelivery) return;
-                _isDelivery = value;
-                IsPickup = !value;
-                OnPropertyChanged(nameof(IsDelivery));
-                OnPropertyChanged(nameof(IsPickup));
-            }
-        }
-
-        public bool IsPickup
-        {
-            get => _isPickup;
-            set
-            {
-                if (value == _isPickup) return;
-                _isPickup = value;
-                IsDelivery = !value;
-                OnPropertyChanged(nameof(IsPickup));
-                OnPropertyChanged(nameof(IsDelivery));
-            }
-        }
+        private int _index = -1;
 
         public OrderViewModel(IDataServiceProvider provider)
         {
@@ -102,8 +33,7 @@
                 EnableDelete = EnableEdit = false;
                 return;
             }
-            SelectedCompany = Companies.First();
-            await SelectedCompanyChanged();            
+            SelectedCompany = Companies.First(); 
 
             if (!await RefreshOrdersAsync(Database, SelectedJobsite.JobsiteId))
             {
@@ -112,6 +42,29 @@
             }
             SelectedOrder = Orders.First();
             EnableDelete = EnableEdit = true;
+        }
+
+        [RelayCommand]
+        public void CheckboxChanged(string sender)
+        {
+            if (sender == nameof(IsDelivery))
+            {
+                IsPickup = !IsDelivery;
+                return;
+            }
+            
+            if (sender == nameof(IsPickup))
+                    IsDelivery = !IsPickup;
+        }
+
+        [RelayCommand]
+        public void SelectedOrderChanged()
+        {
+            IsDelivery = Convert.ToBoolean(SelectedOrder.OrderTypeId);
+            IsPickup = !IsDelivery;
+
+            if (!string.IsNullOrEmpty(SelectedOrder.Date))
+                SelectedDate = Convert.ToDateTime(SelectedOrder.Date);
         }
 
         [RelayCommand]

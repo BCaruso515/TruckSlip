@@ -30,10 +30,10 @@ namespace TruckSlip.Data
 
         public async Task DropTablesAsync()
         {
+            await _connection.DropTableAsync<OrderItem>();
+            await _connection.DropTableAsync<Order>();
             await _connection.DropTableAsync<Product>();
             await _connection.DropTableAsync<UnitType>();
-            await _connection.DropTableAsync<Order>();
-            await _connection.DropTableAsync<OrderItem>();
             await _connection.DropTableAsync<Jobsite>();
             await _connection.DropTableAsync<Company>();
         }

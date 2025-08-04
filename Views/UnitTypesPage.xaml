@@ -23,7 +23,7 @@
             Text1="Description:"
             Text2="Use this form to add, edit or delete unit types for inventory items."
             Text3="WARNING"
-            Text4="Deleting a unit type will delete ALL records associated with that unit type."
+            Text4="Deleting a unit type will delete ALL items with that unit type."
             Text5="This could result in substantial loss of data." />
         <Label FontAttributes="Bold" Text="Selected Unit" />
         <controls:ComboBox

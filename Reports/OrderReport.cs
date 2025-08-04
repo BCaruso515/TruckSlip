@@ -145,12 +145,13 @@ namespace TruckSlip.Reports
 
         private Table ComposeFooterTable()
         {
+            var notes = _order.Notes ?? string.Empty;
             float[] columnWidths = [560F];
             Table table = new Table(columnWidths)
                 .SetKeepTogether(true)
                 .SetMinHeight(80);
             table.AddHeaderCell(iTextPdfHelper.NoBorder("NOTES:"));
-            table.AddCell(GetNotes(_order.Notes));
+            table.AddCell(GetNotes(notes));
             return table;
         }
 

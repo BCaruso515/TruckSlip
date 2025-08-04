@@ -33,7 +33,8 @@
             DisplayMember="Name"
             ItemSource="{Binding Companies}"
             Placeholder="Required"
-            SelectedItem="{Binding SelectedCompany}">
+            SelectedItem="{Binding SelectedCompany}"
+            SelectionChangedCommand="{Binding SelectedCompanyChangedCommand}">
             <controls:ComboBox.ItemTemplate>
                 <DataTemplate x:DataType="datasource:Company">
                     <Label Text="{Binding Name}" />
