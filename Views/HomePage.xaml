@@ -20,8 +20,7 @@
         <ToolbarItem
             Command="{Binding SignOutCommand}"
             IsEnabled="{Binding UseRemote}"
-            Text="Sign Out">
-        </ToolbarItem>
+            Text="Sign Out" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -98,6 +97,7 @@
                 </Button>
                 <Button
                     Command="{Binding ImportDataCommand}"
+                    IsVisible="False"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Restore/Import Data">
                     <Button.ImageSource>
@@ -109,6 +109,7 @@
                 </Button>
                 <Button
                     Command="{Binding BackupDataCommand}"
+                    IsVisible="False"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Backup/Export Data">
                     <Button.ImageSource>
@@ -120,6 +121,7 @@
                 </Button>
                 <Button
                     Command="{Binding DeleteAllDataCommand}"
+                    IsVisible="False"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Factory Reset Data">
                     <Button.ImageSource>
@@ -130,7 +132,10 @@
                     </Button.ImageSource>
                 </Button>
             </FlexLayout>
-            <HorizontalStackLayout Grid.Row="1" Spacing="25">
+            <HorizontalStackLayout
+                Grid.Row="1"
+                IsVisible="False"
+                Spacing="25">
                 <Label Text="Use Firebase database?" VerticalOptions="Start" />
                 <Switch IsToggled="{Binding UseRemote}" VerticalOptions="Start">
                     <Switch.Behaviors>

@@ -27,6 +27,7 @@
                 <Label FontAttributes="Bold" Text="Company" />
                 <controls:ComboBox
                     DisplayMember="Name"
+                    IsEnabled="{Binding EnableDelete}"
                     ItemSource="{Binding Companies}"
                     Placeholder="Required"
                     SelectedItem="{Binding SelectedCompany}"
@@ -40,6 +41,7 @@
                 <Label FontAttributes="Bold" Text="Job Name" />
                 <controls:ComboBox
                     DisplayMember="Name"
+                    IsEnabled="{Binding EnableDelete}"
                     ItemSource="{Binding Jobsites}"
                     Placeholder="Required"
                     SelectedItem="{Binding SelectedJobsite}"
@@ -53,6 +55,7 @@
                 <Label FontAttributes="Bold" Text="Selected Order" />
                 <controls:ComboBox
                     DisplayMember="Date"
+                    IsEnabled="{Binding EnableDelete}"
                     ItemSource="{Binding Orders}"
                     Placeholder="Required"
                     SelectedItem="{Binding SelectedOrder}"
@@ -72,27 +75,27 @@
                     <Label Text="Delivery" VerticalOptions="Center" />
                     <CheckBox
                         IsChecked="{Binding IsDelivery}"
-                        IsEnabled="{Binding IsEnabled}" 
+                        IsEnabled="{Binding IsEnabled}"
                         VerticalOptions="Center">
                         <CheckBox.Behaviors>
                             <toolkit:EventToCommandBehavior
                                 BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
-                                EventName="CheckedChanged"
+                                Command="{Binding CheckboxChangedCommand}"
                                 CommandParameter="IsDelivery"
-                                Command="{Binding CheckboxChangedCommand}"/>
+                                EventName="CheckedChanged" />
                         </CheckBox.Behaviors>
                     </CheckBox>
                     <Label Text="Pickup" VerticalOptions="Center" />
                     <CheckBox
                         IsChecked="{Binding IsPickup}"
                         IsEnabled="{Binding IsEnabled}"
-                        VerticalOptions="Center" >
+                        VerticalOptions="Center">
                         <CheckBox.Behaviors>
                             <toolkit:EventToCommandBehavior
                                 BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
-                                EventName="CheckedChanged"
+                                Command="{Binding CheckboxChangedCommand}"
                                 CommandParameter="IsPickup"
-                                Command="{Binding CheckboxChangedCommand}"/>
+                                EventName="CheckedChanged" />
                         </CheckBox.Behaviors>
                     </CheckBox>
                 </HorizontalStackLayout>
@@ -117,8 +120,8 @@
                     </Button>
                     <Button
                         Command="{Binding AddCancelCommand}"
-                        IsEnabled="{Binding EnableAdd}"
                         CommandParameter="{Reference date}"
+                        IsEnabled="{Binding EnableAdd}"
                         Text="{Binding AddCancelButtonText}">
                         <Button.ImageSource>
                             <FontImageSource
