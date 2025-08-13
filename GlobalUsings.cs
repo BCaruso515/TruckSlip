@@ -10,5 +10,4 @@ global using TruckSlip.Helpers;
 global using TruckSlip.Models;
 global using TruckSlip.Views;
 global using TruckSlip.ViewModels;
-global using TruckSlip.Reports;
 global using TruckSlip.Controls;

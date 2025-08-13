@@ -30,8 +30,8 @@
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
-		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged 
-		<WindowsPackageType>None</WindowsPackageType>-->
+		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
+		<WindowsPackageType>None</WindowsPackageType>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
@@ -88,12 +88,11 @@
     <PackageReference Include="CommunityToolkit.MVVM" Version="8.3.2" />
     <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
     <PackageReference Include="FirebaseDatabase.net" Version="5.0.0" />
-    <PackageReference Include="itext" Version="9.2.0" />
-    <PackageReference Include="itext.bouncy-castle-adapter" Version="9.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.80" />
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.80" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.6" />
+    <PackageReference Include="PDFsharp-MigraDoc" Version="6.2.1" />
     <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
   </ItemGroup>
 
@@ -101,6 +100,16 @@
     <MauiXaml Update="Views\CompanyPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+  </ItemGroup>
+
+  <ItemGroup>
+    <MauiFont Remove="Resources\Fonts\OpenSans-Regular.ttf" />
+    <MauiFont Remove="Resources\Fonts\OpenSans-Semibold.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\OpenSans-Regular.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\OpenSans-Semibold.ttf" />    
   </ItemGroup>
 
 </Project>

@@ -9,6 +9,8 @@
         [ObservableProperty] private bool _isDelivery;
         [ObservableProperty] private bool _isPickup;
 
+        private static bool SkipRefresh { get; set; } = false;
+
         private readonly IDataServiceProvider _provider;
         private IDataService Database => _provider.Current;
         private int _index = -1;
@@ -23,6 +25,11 @@
         public async Task Appearing()
         {
             SetButtonText(false);
+            if (SkipRefresh)
+            { 
+                SkipRefresh = false;
+                return; 
+            }
 
             EnableAdd = await RefreshCompanyAsync(Database);
             if (!EnableAdd)
@@ -182,6 +189,7 @@
         [RelayCommand]
         public async Task AddItems()
         {
+            SkipRefresh = true;
             await Shell.Current.GoToAsync(nameof(OrderItemsPage), true,
                 new Dictionary<string, object>
                 {

@@ -1,4 +1,6 @@
-﻿namespace TruckSlip.ViewModels
+﻿using TruckSlip.Report;
+
+namespace TruckSlip.ViewModels
 {
     [QueryProperty(nameof(SelectedOrder), "SelectedOrder")]
     public partial class OrderItemsViewModel : BaseViewModel
@@ -82,15 +84,21 @@
         [RelayCommand]
         public async Task ExportOrder()
         {
-            var jobsites = await Database.GetJobsiteAsync();
-            var jobsite = jobsites.Where(x => x.JobsiteId == SelectedOrder.JobsiteId).First();
+            try
+            {
+                var jobsites = await Database.GetJobsiteAsync();
+                var jobsite = jobsites.Where(x => x.JobsiteId == SelectedOrder.JobsiteId).First();
 
-            if (! await RefreshCompanyAsync(Database))
-                throw new Exception("Company cannot be null!");
-            var company = Companies.Where(x => x.CompanyId == jobsite.CompanyId).First(); 
+                if (! await RefreshCompanyAsync(Database))
+                    throw new Exception("Company cannot be null!");
+                var company = Companies.Where(x => x.CompanyId == jobsite.CompanyId).First();
+            
+                var orderReport = new OrderReportService(company, jobsite, SelectedOrder, ItemsQuery);
+                orderReport.GeneratePdfAndShow();
+            }
 
-            var orderReport = new OrderReport(company, jobsite, SelectedOrder, ItemsQuery);
-            orderReport.GeneratePdfAndShow();
+            catch (Exception ex)
+            { await Shell.Current.DisplayAlert("Error", ex.Message, "OK"); }
         }
     }
 }

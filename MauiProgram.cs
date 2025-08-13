@@ -1,9 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using CommunityToolkit.Maui;
+﻿using CommunityToolkit.Maui;
 using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Firebase.Auth.Repository;
 using Firebase.Database;
+using Microsoft.Extensions.Configuration;
+using PdfSharp.Fonts;
+using System.Globalization;
+using TruckSlip.FontResolver;
 
 namespace TruckSlip
 {
@@ -22,6 +25,9 @@ namespace TruckSlip
                     fonts.AddFont("free-regular-400.otf", "FreeRegular");
                     fonts.AddFont("free-solid-900.otf", "FreeSolid");
                 });
+
+            GlobalFontSettings.FontResolver = new GenericFontResolver();
+            CultureInfo.CurrentCulture = new CultureInfo("en-US");
 
             IConfiguration config;
 
