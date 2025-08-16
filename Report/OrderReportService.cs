@@ -70,7 +70,7 @@ namespace TruckSlip.Report
 
             var image = row.Cells[0].AddImage(GetLogo());
             image.LockAspectRatio = true;
-            image.Height = Unit.FromInch(0.5);
+            image.Height = Unit.FromInch(0.6);
 
             // Add title
             var title = row.Cells[1].AddParagraph("TRUCK SLIP");
@@ -209,7 +209,7 @@ namespace TruckSlip.Report
             headerRow.Format.Font.Bold = true;
             headerRow.Cells[0].AddParagraph("Qty");
             headerRow.Cells[1].AddParagraph("Unit");
-            headerRow.Cells[2].AddParagraph("Task Code");
+            headerRow.Cells[2].AddParagraph("Cost Code");
             headerRow.Cells[3].AddParagraph("Item Description");
             // Add data rows
             foreach (var item in _dataSource)
@@ -243,9 +243,8 @@ namespace TruckSlip.Report
         private string GetLogo()
         {
             if (_company.Logo == null) return string.Empty;
-            var logoPath = Path.Combine(FileSystem.CacheDirectory, "tempImage.jpg");
-            File.WriteAllBytes(logoPath, _company.Logo);
-            return logoPath;
+            string base64Image = Convert.ToBase64String(_company.Logo);
+            return $"base64:{base64Image}" ;
         }
 
         private static string GetBooleanString(bool value)

@@ -40,7 +40,7 @@ namespace TruckSlip.ViewModels
                 var userCredential = await _firebaseAuthClient.CreateUserWithEmailAndPasswordAsync(email, password, displayName);
                 if (userCredential != null)
                 {
-                    await Toast.Make("User created successfully", ToastDuration.Short).Show();
+                    await ShowNotification("User created successfully");
                     await Shell.Current.GoToAsync("..");
                 }
             }

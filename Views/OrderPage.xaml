@@ -27,7 +27,7 @@
                 <Label FontAttributes="Bold" Text="Company" />
                 <controls:ComboBox
                     DisplayMember="Name"
-                    IsEnabled="{Binding EnableDelete}"
+                    IsEnabled="{Binding IsComboboxEnabled}"
                     ItemSource="{Binding Companies}"
                     Placeholder="Required"
                     SelectedItem="{Binding SelectedCompany}"
@@ -41,7 +41,7 @@
                 <Label FontAttributes="Bold" Text="Job Name" />
                 <controls:ComboBox
                     DisplayMember="Name"
-                    IsEnabled="{Binding EnableDelete}"
+                    IsEnabled="{Binding IsComboboxEnabled}"
                     ItemSource="{Binding Jobsites}"
                     Placeholder="Required"
                     SelectedItem="{Binding SelectedJobsite}"
@@ -55,7 +55,7 @@
                 <Label FontAttributes="Bold" Text="Selected Order" />
                 <controls:ComboBox
                     DisplayMember="Date"
-                    IsEnabled="{Binding EnableDelete}"
+                    IsEnabled="{Binding IsComboboxEnabled}"
                     ItemSource="{Binding Orders}"
                     Placeholder="Required"
                     SelectedItem="{Binding SelectedOrder}"

@@ -100,5 +100,16 @@
             EditSaveButtonText = AddCancelButtonText = EditSaveImage = AddCancelImage = string.Empty;
             IsEnabled = EnableDelete = EnableAdd = EnableEdit = false;
         }
+
+        public static async Task ShowNotification(string message)
+        {
+#if ANDROID || IOS
+            await Toast.Make(message, ToastDuration.Short).Show();
+#elif WINDOWS
+            await Shell.Current.DisplayAlert("", message, "OK");
+#else
+            await Task.CompletedTask;
+#endif
+        }
     }
 }

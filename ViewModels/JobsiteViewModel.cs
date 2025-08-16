@@ -63,8 +63,9 @@ namespace TruckSlip.ViewModels
                     if (await Database.AddOrUpdateJobsiteAsync(SelectedJobsite))
                     {
                         SetButtonText(false);
+                        var jobsiteId = SelectedJobsite.JobsiteId;
                         await RefreshJobsiteAsync(Database, SelectedCompany.CompanyId);
-                        SelectedJobsite = Jobsites.First();
+                        SelectedJobsite = Jobsites.First(x=> x.JobsiteId == jobsiteId);
                     }
                 }
             }

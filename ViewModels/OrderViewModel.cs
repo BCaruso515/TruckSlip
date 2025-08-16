@@ -8,6 +8,7 @@
         [ObservableProperty] private Order _selectedOrder = new();
         [ObservableProperty] private bool _isDelivery;
         [ObservableProperty] private bool _isPickup;
+        [ObservableProperty] private bool _isComboboxEnabled;
 
         private static bool SkipRefresh { get; set; } = false;
 
@@ -24,7 +25,9 @@
         [RelayCommand]
         public async Task Appearing()
         {
-            SetButtonText(false);
+            IsComboboxEnabled = true;
+            SetButtonText(!IsComboboxEnabled);
+
             if (SkipRefresh)
             { 
                 SkipRefresh = false;
@@ -41,14 +44,6 @@
                 return;
             }
             SelectedCompany = Companies.First(); 
-
-            if (!await RefreshOrdersAsync(Database, SelectedJobsite.JobsiteId))
-            {
-                EnableDelete = EnableEdit = false;
-                return;
-            }
-            SelectedOrder = Orders.First();
-            EnableDelete = EnableEdit = true;
         }
 
         [RelayCommand]
@@ -77,7 +72,8 @@
         [RelayCommand]
         public async Task SelectedCompanyChanged()
         {
-            if (!await RefreshJobsiteAsync(Database, SelectedCompany.CompanyId))
+            EnableAdd = await RefreshJobsiteAsync(Database, SelectedCompany.CompanyId);
+            if (!EnableAdd)
             {
                 EnableDelete = EnableEdit = false;
                 SelectedJobsite = new();
@@ -109,7 +105,8 @@
             {
                 if (EditSaveButtonText == "Edit")
                 {
-                    SetButtonText(true);
+                    IsComboboxEnabled = false;
+                    SetButtonText(!IsComboboxEnabled);
                     _index = Orders.IndexOf(SelectedOrder);
                     view.Focus();
                 }
@@ -120,7 +117,8 @@
                     SelectedOrder.Date = SelectedDate.ToString("d");
                     if (await Database.AddOrUpdateOrderAsync(SelectedOrder))
                     {
-                        SetButtonText(false);
+                        IsComboboxEnabled = true;
+                        SetButtonText(!IsComboboxEnabled);
                         EnableDelete = EnableEdit = await RefreshOrdersAsync(Database, SelectedJobsite.JobsiteId);
                         SelectedOrder = Orders.Where(x => x.OrderId == SelectedOrder.OrderId).First();
                     }
@@ -137,7 +135,8 @@
             {
                 if (AddCancelButtonText == "Add")
                 {
-                    SetButtonText(true);
+                    IsComboboxEnabled = false;
+                    SetButtonText(!IsComboboxEnabled);
                     _index = Orders.IndexOf(SelectedOrder);
                     SelectedOrder = new();
                     EnableEdit = true;
@@ -145,7 +144,8 @@
                 }
                 else
                 {
-                    SetButtonText(false);
+                    IsComboboxEnabled = true;
+                    SetButtonText(!IsComboboxEnabled);
                     EnableDelete = EnableEdit = await RefreshOrdersAsync(Database, SelectedJobsite.JobsiteId);
 
                     if (_index > -1)

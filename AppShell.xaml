@@ -8,6 +8,9 @@
     xmlns:views="clr-namespace:TruckSlip.Views"
     Title="TruckSlip">
 
+    <Shell.ForegroundColor>
+        <AppThemeBinding Dark="{StaticResource White}" Light="{StaticResource Black}" />
+    </Shell.ForegroundColor>
     <ShellContent
         ContentTemplate="{DataTemplate views:SignInPage}"
         FlyoutItemIsVisible="False"

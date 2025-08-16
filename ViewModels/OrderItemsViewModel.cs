@@ -69,7 +69,8 @@ namespace TruckSlip.ViewModels
                 ProductId = SelectedProduct.ProductId,
                 Quantity = SelectedOrderItem.Quantity
             });
-            await RefreshItemsQueryAsync(Database, SelectedOrder.OrderId);
+            if (!await RefreshItemsQueryAsync(Database, SelectedOrder.OrderId)) return;
+            await ShowNotification("Item Added");
         }
 
         [RelayCommand]

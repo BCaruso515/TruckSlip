@@ -114,7 +114,7 @@ namespace TruckSlip.ViewModels
                     File.Copy(result.FullPath, _sqliteDbPath, true);
                 }
 
-                await Toast.Make("Database has been restored from backup", ToastDuration.Short).Show();
+                await ShowNotification("Database has been restored from backup");
             }
             catch (Exception ex) { await Shell.Current.DisplayAlert("Error!", ex.Message, "Ok"); }
         }
@@ -149,16 +149,9 @@ namespace TruckSlip.ViewModels
 
             string newFileName = await GetFileName(Path.GetFileNameWithoutExtension(dataLocation));
             File.Copy(dataLocation, Path.Combine(result.Folder.Path, $"{newFileName}.db3"), true);
-            try
-            {
-                await Toast.Make("Data backup successful", ToastDuration.Short).Show(cancellationToken);
-            }
-            catch 
-            {
-                await Shell.Current.DisplayAlert("", "Data backup successful", "OK");
-                return;
-            }   
             
+            await Shell.Current.DisplayAlert("Backup Successful",
+                $"Data backup successful to {Path.Combine(result.Folder.Path, $"{newFileName}.db3")}", "OK");
 #else
             await Task.CompletedTask;
 #endif
@@ -177,7 +170,25 @@ namespace TruckSlip.ViewModels
 
                 await Database.DropTablesAsync();
                 await Database.CreateTablesAsync();
-                await Toast.Make("Database has been restored to clean install", ToastDuration.Short).Show();
+                await ShowNotification("Database has been reset to clean install");
+            }
+            catch (Exception ex) { await Shell.Current.DisplayAlert("Error!", ex.Message, "Ok"); }
+        }
+
+        [RelayCommand]
+        public async Task LoadDefaultData()
+        {
+            try
+            {
+                if (!await Shell.Current.DisplayAlert("WARNING!",
+                    "This will delete all current application data and replace it with defaults. " +
+                    "This includes all orders, unit types, jobsites, companies, and inventory. " +
+                    "Are you sure you want to proceed? This action can not be undone.",
+                    "Yes", "No")) return;
+
+                var helper = new DefaultDataHelper(_provider);
+                await helper.LoadDefaultsAsync();
+                await ShowNotification("Default data has been loaded");
             }
             catch (Exception ex) { await Shell.Current.DisplayAlert("Error!", ex.Message, "Ok"); }
         }

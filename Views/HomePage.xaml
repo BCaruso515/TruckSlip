@@ -20,7 +20,7 @@
         <ToolbarItem
             Command="{Binding SignOutCommand}"
             IsEnabled="{Binding UseRemote}"
-            Text="Sign Out" />
+            Text="Sign Out"/>
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -63,7 +63,7 @@
                     Command="{Binding NavigateToPageCommand}"
                     CommandParameter="UnitTypesPage"
                     Style="{StaticResource Key=ImageTextButton}"
-                    Text="Unit Types">
+                    Text="Units">
                     <Button.ImageSource>
                         <FontImageSource
                             FontFamily="{Binding FontFamily}"
@@ -75,7 +75,7 @@
                     Command="{Binding NavigateToPageCommand}"
                     CommandParameter="ProductPage"
                     Style="{StaticResource Key=ImageTextButton}"
-                    Text="Inventory Items">
+                    Text="Inventory">
                     <Button.ImageSource>
                         <FontImageSource
                             FontFamily="{Binding FontFamily}"
@@ -87,7 +87,7 @@
                     Command="{Binding NavigateToPageCommand}"
                     CommandParameter="OrderPage"
                     Style="{StaticResource Key=ImageTextButton}"
-                    Text="Truck Request">
+                    Text="Order">
                     <Button.ImageSource>
                         <FontImageSource
                             FontFamily="{Binding FontFamily}"
@@ -96,20 +96,8 @@
                     </Button.ImageSource>
                 </Button>
                 <Button
-                    Command="{Binding ImportDataCommand}"
-                    IsVisible="False"
-                    Style="{StaticResource Key=ImageTextButton}"
-                    Text="Restore/Import Data">
-                    <Button.ImageSource>
-                        <FontImageSource
-                            FontFamily="{Binding FontFamily}"
-                            Glyph="{x:Static helpers:FontAwesomeHelper.Download}"
-                            Size="40" />
-                    </Button.ImageSource>
-                </Button>
-                <Button
                     Command="{Binding BackupDataCommand}"
-                    IsVisible="False"
+                    IsVisible="True"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Backup/Export Data">
                     <Button.ImageSource>
@@ -120,8 +108,20 @@
                     </Button.ImageSource>
                 </Button>
                 <Button
+                    Command="{Binding ImportDataCommand}"
+                    IsVisible="True"
+                    Style="{StaticResource Key=ImageTextButton}"
+                    Text="Restore/Import Data">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="{Binding FontFamily}"
+                            Glyph="{x:Static helpers:FontAwesomeHelper.Download}"
+                            Size="40" />
+                    </Button.ImageSource>
+                </Button>
+                <Button
                     Command="{Binding DeleteAllDataCommand}"
-                    IsVisible="False"
+                    IsVisible="True"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Factory Reset Data">
                     <Button.ImageSource>
@@ -131,10 +131,22 @@
                             Size="40" />
                     </Button.ImageSource>
                 </Button>
+                <Button
+                    Command="{Binding LoadDefaultDataCommand}"
+                    IsVisible="True"
+                    Style="{StaticResource Key=ImageTextButton}"
+                    Text="Load Defaults">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="{Binding FontFamily}"
+                            Glyph="{x:Static helpers:FontAwesomeHelper.PenToSquare}"
+                            Size="40" />
+                    </Button.ImageSource>
+                </Button>
             </FlexLayout>
             <HorizontalStackLayout
                 Grid.Row="1"
-                IsVisible="False"
+                IsVisible="True"
                 Spacing="25">
                 <Label Text="Use Firebase database?" VerticalOptions="Start" />
                 <Switch IsToggled="{Binding UseRemote}" VerticalOptions="Start">
