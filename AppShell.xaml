@@ -6,7 +6,7 @@
     xmlns:helpers="clr-namespace:TruckSlip.Helpers"
     xmlns:local="clr-namespace:TruckSlip"
     xmlns:views="clr-namespace:TruckSlip.Views"
-    Title="TruckSlip">
+    Title="Truck Tickets">
 
     <Shell.ForegroundColor>
         <AppThemeBinding Dark="{StaticResource White}" Light="{StaticResource Black}" />

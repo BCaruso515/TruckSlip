@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace TruckSlip.ViewModels
+﻿namespace TruckSlip.ViewModels
 {
     public partial class JobsiteViewModel: BaseViewModel
     {
@@ -43,7 +41,7 @@ namespace TruckSlip.ViewModels
                 EnableDelete = EnableEdit = false;
                 return;
             }
-            SelectedCompany = Companies.First();
+            SelectedCompany = Companies.FirstOrDefault() ?? new();
         }
 
         [RelayCommand]
@@ -65,7 +63,8 @@ namespace TruckSlip.ViewModels
                         SetButtonText(false);
                         var jobsiteId = SelectedJobsite.JobsiteId;
                         await RefreshJobsiteAsync(Database, SelectedCompany.CompanyId);
-                        SelectedJobsite = Jobsites.First(x=> x.JobsiteId == jobsiteId);
+                        SelectedJobsite = Jobsites.FirstOrDefault(x=> x.JobsiteId == jobsiteId) 
+                            ?? throw new Exception ("Jobsite not found!") ;
                     }
                 }
             }

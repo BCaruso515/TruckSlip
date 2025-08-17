@@ -22,7 +22,7 @@
             SetButtonText(false);
 
             if (RefreshInventoryTypes())
-                SelectedType = InventoryTypes.First();
+                SelectedType = InventoryTypes.FirstOrDefault() ?? new();
 
             EnableAdd = await RefreshUnitTypesAsync(Database);
             if (!EnableAdd)
@@ -33,7 +33,7 @@
                 return;
             }
 
-            SelectedUnit = UnitTypes.First();
+            SelectedUnit = UnitTypes.FirstOrDefault() ?? new();
 
             if (!await RefreshProductsAsync(Database))
             {
@@ -41,7 +41,7 @@
                 return;
             }
 
-            SelectedProduct = Products.First();
+            SelectedProduct = Products.FirstOrDefault() ?? new();
             EnableDelete = EnableEdit = true;
         }
 
@@ -71,7 +71,8 @@
                     {
                         SetButtonText(false);
                         EnableDelete = EnableEdit = await RefreshProductsAsync(Database);
-                        SelectedProduct = Products.Where(x => x.ProductId == SelectedProduct.ProductId).First();
+                        SelectedProduct = Products.FirstOrDefault(x => x.ProductId == SelectedProduct.ProductId)
+                            ?? throw new Exception ("Product not found!");
                     }
                 }
             }
@@ -140,7 +141,7 @@
         private void SetUnitType()
         {
             if (SelectedProduct.UnitId == 0) return;
-            var result = UnitTypes.Where(x => x.UnitId == SelectedProduct.UnitId).First();
+            var result = UnitTypes.FirstOrDefault(x => x.UnitId == SelectedProduct.UnitId);
             if (result == null) return;
             SelectedUnit = result;
         }
@@ -148,7 +149,7 @@
         private void SetInventoryType()
         {
             if (SelectedProduct.TypeId == 0) return;
-            var result = InventoryTypes.Where(x => x.TypeId == SelectedProduct.TypeId).First();
+            var result = InventoryTypes.FirstOrDefault(x => x.TypeId == SelectedProduct.TypeId);
             if (result == null) return;
             SelectedType = result;
         }

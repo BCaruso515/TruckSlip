@@ -14,11 +14,11 @@
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
-            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+            BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"
             Command="{Binding AppearingCommand}"
             EventName="Appearing" />
         <toolkit:EventToCommandBehavior
-            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+            BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"
             Command="{Binding AppearingCommand}"
             EventName="" />
     </ContentPage.Behaviors>

@@ -13,7 +13,7 @@
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
-            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+            BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"
             Command="{Binding AppearingCommand}"
             EventName="Appearing" />
     </ContentPage.Behaviors>
@@ -31,13 +31,13 @@
             IsEnabled="{Binding EnableDelete}"
             ItemSource="{Binding Products}"
             Placeholder="Required"
-            SelectionChangedCommand="{Binding SelectedProductChangedCommand}"
-            SelectedItem="{Binding SelectedProduct}">
+            SelectedItem="{Binding SelectedProduct}"
+            SelectionChangedCommand="{Binding SelectedProductChangedCommand}">
             <controls:ComboBox.ItemTemplate>
                 <DataTemplate x:DataType="datasource:Product">
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="{Binding TaskCode}"/>
-                        <Label Text="{Binding Name}"/>
+                        <Label Text="{Binding TaskCode}" />
+                        <Label Text="{Binding Name}" />
                     </HorizontalStackLayout>
                 </DataTemplate>
             </controls:ComboBox.ItemTemplate>

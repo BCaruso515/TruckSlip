@@ -43,7 +43,7 @@
                 EnableDelete = EnableEdit = false;
                 return;
             }
-            SelectedCompany = Companies.First(); 
+            SelectedCompany = Companies.FirstOrDefault() ?? new(); 
         }
 
         [RelayCommand]
@@ -120,7 +120,8 @@
                         IsComboboxEnabled = true;
                         SetButtonText(!IsComboboxEnabled);
                         EnableDelete = EnableEdit = await RefreshOrdersAsync(Database, SelectedJobsite.JobsiteId);
-                        SelectedOrder = Orders.Where(x => x.OrderId == SelectedOrder.OrderId).First();
+                        SelectedOrder = Orders.FirstOrDefault(x => x.OrderId == SelectedOrder.OrderId)
+                            ?? throw new Exception ("Order not found!");
                     }
                 }
             }

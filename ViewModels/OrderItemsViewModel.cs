@@ -41,7 +41,7 @@ namespace TruckSlip.ViewModels
                 EnableAddToOrder = false;
                 return;
             }
-            SelectedProduct = Products.First();
+            SelectedProduct = Products.FirstOrDefault() ?? new();
             EnableAddToOrder = true;
 
             await RefreshItemsQueryAsync(Database, SelectedOrder.OrderId);
@@ -52,16 +52,16 @@ namespace TruckSlip.ViewModels
         {
             if (SelectedProduct == null || SelectedProduct.ProductId == 0) return;
 
-            SelectedUnitType = UnitTypes.First(UnitTypes => UnitTypes.UnitId == SelectedProduct.UnitId);
+            SelectedUnitType = UnitTypes.FirstOrDefault(unit => unit.UnitId == SelectedProduct.UnitId) ?? new();
             SelectedOrderItem.Quantity = 1;
             OnPropertyChanged(nameof(SelectedOrderItem));
+            OnPropertyChanged(nameof(SelectedUnitType));
         }
 
         [RelayCommand]
         public async Task AddToOrder()
         {
-            if (Orders.Count == 0) return;
-            if (Products.Count == 0) return;
+            if (Orders.Count == 0 || Products.Count == 0) return;
 
             await Database.AddOrUpdateOrderItemAsync(new()
             {
@@ -78,7 +78,12 @@ namespace TruckSlip.ViewModels
         {
             if (itemsQuery == null) return;
             ObservableCollection<OrderItem> results = await Database.GetOrderItemAsync();
-            var result = results.Where(x => x.OrderItemId == itemsQuery.OrderItemId).First();
+            var result = results.FirstOrDefault(x => x.OrderItemId == itemsQuery.OrderItemId);
+            if (result == null)
+            {
+                await ShowNotification("Order item not found.");
+                return;
+            }
             await Database.DeleteOrderItemAsync(result);
             await RefreshItemsQueryAsync(Database, SelectedOrder.OrderId);
         }
@@ -88,18 +93,19 @@ namespace TruckSlip.ViewModels
             try
             {
                 var jobsites = await Database.GetJobsiteAsync();
-                var jobsite = jobsites.Where(x => x.JobsiteId == SelectedOrder.JobsiteId).First();
-
-                if (! await RefreshCompanyAsync(Database))
+                var jobsite = jobsites.FirstOrDefault(x => x.JobsiteId == SelectedOrder.JobsiteId) 
+                    ?? throw new Exception("Jobsite not found for this order.");
+                if (!await RefreshCompanyAsync(Database) || Companies.Count == 0)
                     throw new Exception("Company cannot be null!");
-                var company = Companies.Where(x => x.CompanyId == jobsite.CompanyId).First();
-            
+                var company = Companies.FirstOrDefault(x => x.CompanyId == jobsite.CompanyId) 
+                    ?? throw new Exception("Company not found for this jobsite.");
                 var orderReport = new OrderReportService(company, jobsite, SelectedOrder, ItemsQuery);
                 orderReport.GeneratePdfAndShow();
             }
-
             catch (Exception ex)
-            { await Shell.Current.DisplayAlert("Error", ex.Message, "OK"); }
+            {
+                await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            }
         }
     }
 }

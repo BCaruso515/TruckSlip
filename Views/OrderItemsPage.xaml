@@ -6,7 +6,6 @@
     xmlns:controls="clr-namespace:TruckSlip.Controls"
     xmlns:datasource="clr-namespace:TruckSlip.Models"
     xmlns:helpers="clr-namespace:TruckSlip.Helpers"
-    xmlns:templates="clr-namespace:TruckSlip.DataTemplates"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:TruckSlip.ViewModels"
     x:Name="this"
@@ -15,7 +14,7 @@
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
-            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+            BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"
             Command="{Binding AppearingCommand}"
             EventName="Appearing" />
     </ContentPage.Behaviors>
@@ -31,8 +30,8 @@
                 IsEnabled="{Binding EnableAddToOrder}"
                 ItemSource="{Binding Products}"
                 Placeholder="Required"
-                SelectionChangedCommand="{Binding SelectedProductChangedCommand}"
-                SelectedItem="{Binding SelectedProduct}">
+                SelectedItem="{Binding SelectedProduct}"
+                SelectionChangedCommand="{Binding SelectedProductChangedCommand}">
                 <controls:ComboBox.ItemTemplate>
                     <DataTemplate x:DataType="datasource:Product">
                         <HorizontalStackLayout Spacing="10">

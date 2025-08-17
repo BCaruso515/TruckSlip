@@ -25,7 +25,7 @@ namespace TruckSlip.ViewModels
                 return;
             }
 
-            SelectedCompany = Companies.First();
+            SelectedCompany = Companies.FirstOrDefault() ?? new();
             EnableDelete = EnableEdit = true;
         }
 
@@ -48,7 +48,8 @@ namespace TruckSlip.ViewModels
                         SetButtonText(false);
                         var companyId = SelectedCompany.CompanyId;
                         await RefreshCompanyAsync(Database);
-                        SelectedCompany = Companies.First(x=> x.CompanyId == companyId);
+                        SelectedCompany = Companies.FirstOrDefault(x=> x.CompanyId == companyId) 
+                            ?? throw new Exception("Company not found!");
                     }
                 }
             }
@@ -136,10 +137,10 @@ namespace TruckSlip.ViewModels
             });
 
             if (result == null) return;
-            using Stream stream = await result.OpenReadAsync();
 
-            MemoryStream memoryStream = new();
-            stream.CopyTo(memoryStream);
+            using var stream = await result.OpenReadAsync();
+            using var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream);
             SelectedCompany.Logo = memoryStream.ToArray();
             OnPropertyChanged(nameof(SelectedCompany));
         }

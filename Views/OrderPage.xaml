@@ -14,7 +14,7 @@
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
-            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+            BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"
             Command="{Binding AppearingCommand}"
             EventName="Appearing" />
     </ContentPage.Behaviors>
@@ -79,7 +79,7 @@
                         VerticalOptions="Center">
                         <CheckBox.Behaviors>
                             <toolkit:EventToCommandBehavior
-                                BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+                                BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"
                                 Command="{Binding CheckboxChangedCommand}"
                                 CommandParameter="IsDelivery"
                                 EventName="CheckedChanged" />
@@ -92,7 +92,7 @@
                         VerticalOptions="Center">
                         <CheckBox.Behaviors>
                             <toolkit:EventToCommandBehavior
-                                BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+                                BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"
                                 Command="{Binding CheckboxChangedCommand}"
                                 CommandParameter="IsPickup"
                                 EventName="CheckedChanged" />

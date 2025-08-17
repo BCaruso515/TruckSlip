@@ -23,7 +23,7 @@
                 return;
             }
 
-            SelectedUnit = UnitTypes.First();
+            SelectedUnit = UnitTypes.FirstOrDefault() ?? new();
             EnableDelete = EnableEdit =  true;
         }
 
@@ -46,7 +46,8 @@
                     {
                         SetButtonText(false);
                         EnableDelete = EnableEdit = await RefreshUnitTypesAsync(Database);
-                        SelectedUnit = UnitTypes.Where(x => x.UnitId == SelectedUnit.UnitId).First();
+                        SelectedUnit = UnitTypes.FirstOrDefault(x => x.UnitId == SelectedUnit.UnitId)
+                            ?? throw new Exception ("Unit type not found!");
                     }
 
                 }

@@ -17,7 +17,7 @@ namespace TruckSlip.ViewModels
 
         public bool UseRemote
         {
-            get => Preferences.Get("UseRemote", true);
+            get => Preferences.Get("UseRemote", false);
             set
             {
                 Preferences.Set("UseRemote", value);

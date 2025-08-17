@@ -12,7 +12,7 @@
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
-            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+            BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"
             Command="{Binding AppearingCommand}"
             EventName="Appearing" />
     </ContentPage.Behaviors>
@@ -20,7 +20,7 @@
         <ToolbarItem
             Command="{Binding SignOutCommand}"
             IsEnabled="{Binding UseRemote}"
-            Text="Sign Out"/>
+            Text="Sign Out" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -97,7 +97,7 @@
                 </Button>
                 <Button
                     Command="{Binding BackupDataCommand}"
-                    IsVisible="True"
+                    IsVisible="False"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Backup/Export Data">
                     <Button.ImageSource>
@@ -109,7 +109,7 @@
                 </Button>
                 <Button
                     Command="{Binding ImportDataCommand}"
-                    IsVisible="True"
+                    IsVisible="False"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Restore/Import Data">
                     <Button.ImageSource>
@@ -121,7 +121,7 @@
                 </Button>
                 <Button
                     Command="{Binding DeleteAllDataCommand}"
-                    IsVisible="True"
+                    IsVisible="False"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Factory Reset Data">
                     <Button.ImageSource>
@@ -146,13 +146,13 @@
             </FlexLayout>
             <HorizontalStackLayout
                 Grid.Row="1"
-                IsVisible="True"
+                IsVisible="False"
                 Spacing="25">
                 <Label Text="Use Firebase database?" VerticalOptions="Start" />
                 <Switch IsToggled="{Binding UseRemote}" VerticalOptions="Start">
                     <Switch.Behaviors>
                         <toolkit:EventToCommandBehavior
-                            BindingContext="{Binding Path=BindingContext, Source={x:Reference this}, x:DataType=Page}"
+                            BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"
                             Command="{Binding AppearingCommand}"
                             EventName="Toggled" />
                     </Switch.Behaviors>
