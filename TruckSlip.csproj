@@ -57,7 +57,14 @@
 	  <ProvisioningType>automatic</ProvisioningType>
 	</PropertyGroup>
 
-	<ItemGroup>
+  <PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and '$(Configuration)' == 'Release'">
+    <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+    <ArchiveOnBuild>true</ArchiveOnBuild>
+    <CodesignKey>Apple Distribution: Barry Caruso (645X72WD4K)</CodesignKey>
+    <CodesignProvision>MyMAUIIOSTruckTicketsApp</CodesignProvision>
+  </PropertyGroup>
+
+  <ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
