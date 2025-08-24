@@ -1,0 +1,19 @@
+﻿# Support
+
+Truck Tickets is an app that I developed as a hobbyist developer. This app is merely a project that I developed using an idea that could improve efficiency from my real-life job. This app, without modification, is unlikely to be useful to anyone. The source code is available to the public on GitHub (https://github.com/BCaruso515/TruckSlip) Feel free to make any modifiacation necessary to make this app useful for you.
+
+If you need help with or have questions pertaining to Truck Tickets, please reach out to our support team (me) via email.
+
+## Contact Support
+
+- **Email:** [bcaruso9491@gmail.com](mailto:bcaruso9491@gmail.com)
+
+I will attempt to respond to all inquiries as quickly as possible.
+
+## Other Resources
+
+- For bug reports or feature requests, you may also [open an issue on GitHub] (https://github.com/BCaruso515/TruckSlip/issues).
+
+---
+
+Thank you for using Truck Tickets!

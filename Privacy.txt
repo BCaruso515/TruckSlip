@@ -1,0 +1,20 @@
+﻿# Privacy Policy
+
+_Last updated: August 24, 2025_
+
+## Introduction
+
+Truck Tickets values your privacy. This project does **not** collect, store, or process any personal user data.
+
+## Data Collection
+
+- **No user data is collected.**
+- The application does not track, log, or analyze user activity.
+
+## Contact
+
+If you have any questions or concerns regarding privacy, please contact support via email at [bcaruso9491@gmail.com](mailto:bcaruso9491@gmail.com).
+
+---
+
+**Note:** If this policy changes, updates will be posted here.
