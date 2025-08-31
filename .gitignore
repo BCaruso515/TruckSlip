@@ -364,3 +364,6 @@ FodyWeavers.xsd
 
 # AppSettings
 appsettings.json
+
+# Firebase Admin SDK private key file
+truck-slip-firebase-adminsdk.json

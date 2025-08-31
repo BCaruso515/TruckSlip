@@ -3,6 +3,8 @@ using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Firebase.Auth.Repository;
 using Firebase.Database;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Configuration;
 using PdfSharp.Fonts;
 using System.Globalization;
@@ -53,6 +55,13 @@ namespace TruckSlip
                 ],
                 UserRepository = new FileUserRepository("TruckSlip")
             }));
+
+            using var stream = FileSystem.OpenAppPackageFileAsync("truck-slip-firebase-adminsdk.json").Result;
+            using var reader = new StreamReader(stream);
+            FirebaseApp.Create(new AppOptions()
+            {
+                Credential = GoogleCredential.FromJson(reader.ReadToEnd())
+            });
 
             builder.Services.AddSingleton<FirebaseClient>(sp =>
             {

@@ -96,6 +96,7 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" Version="11.2.0" />
     <PackageReference Include="CommunityToolkit.MVVM" Version="8.3.2" />
+    <PackageReference Include="FirebaseAdmin" Version="3.3.0" />
     <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
     <PackageReference Include="FirebaseDatabase.net" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6" />
@@ -120,5 +121,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Fonts\OpenSans-Regular.ttf" />
     <EmbeddedResource Include="Resources\Fonts\OpenSans-Semibold.ttf" />    
+  </ItemGroup>
+
+  <ItemGroup>
+    <MauiAsset Update="Resources\Raw\truck-slip-firebase-adminsdk.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </MauiAsset>
   </ItemGroup>
 </Project>

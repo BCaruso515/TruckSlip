@@ -75,6 +75,9 @@
             EnableAdd = await RefreshJobsiteAsync(Database, SelectedCompany.CompanyId);
             if (!EnableAdd)
             {
+                //Alert to add Company information
+                await Shell.Current.DisplayAlert("Jobsite not Found",
+                    "A jobsite must be added before you can add an order for this company.", "Ok");
                 EnableDelete = EnableEdit = false;
                 SelectedJobsite = new();
                 return;

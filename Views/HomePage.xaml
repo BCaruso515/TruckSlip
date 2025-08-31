@@ -17,10 +17,7 @@
             EventName="Appearing" />
     </ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
-        <ToolbarItem
-            Command="{Binding SignOutCommand}"
-            IsEnabled="{Binding UseRemote}"
-            Text="Sign Out" />
+        <ToolbarItem Command="{Binding SignOutCommand}" Text="Sign Out" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -97,7 +94,7 @@
                 </Button>
                 <Button
                     Command="{Binding BackupDataCommand}"
-                    IsVisible="False"
+                    IsVisible="{Binding IsAdmin}"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Backup/Export Data">
                     <Button.ImageSource>
@@ -109,7 +106,7 @@
                 </Button>
                 <Button
                     Command="{Binding ImportDataCommand}"
-                    IsVisible="False"
+                    IsVisible="{Binding IsAdmin}"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Restore/Import Data">
                     <Button.ImageSource>
@@ -121,7 +118,7 @@
                 </Button>
                 <Button
                     Command="{Binding DeleteAllDataCommand}"
-                    IsVisible="False"
+                    IsVisible="{Binding IsAdmin}"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Factory Reset Data">
                     <Button.ImageSource>
@@ -133,7 +130,7 @@
                 </Button>
                 <Button
                     Command="{Binding LoadDefaultDataCommand}"
-                    IsVisible="True"
+                    IsVisible="{Binding IsAdmin}"
                     Style="{StaticResource Key=ImageTextButton}"
                     Text="Load Defaults">
                     <Button.ImageSource>
@@ -146,9 +143,9 @@
             </FlexLayout>
             <HorizontalStackLayout
                 Grid.Row="1"
-                IsVisible="False"
+                IsVisible="{Binding IsRemote}"
                 Spacing="25">
-                <Label Text="Use Firebase database?" VerticalOptions="Start" />
+                <Label Text="Use Shared Database?" VerticalOptions="Start" />
                 <Switch IsToggled="{Binding UseRemote}" VerticalOptions="Start">
                     <Switch.Behaviors>
                         <toolkit:EventToCommandBehavior

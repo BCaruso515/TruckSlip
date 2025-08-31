@@ -1,12 +1,12 @@
 ﻿using Firebase.Auth;
 using Firebase.Database;
+using FirebaseAdmin.Auth;
 using Microsoft.Extensions.Configuration;
 
 namespace TruckSlip.ViewModels
 {
     public partial class HomeViewModel : BaseViewModel
     {
-
         private readonly FirebaseAuthClient _firebaseAuthClient;
         private readonly IDataServiceProvider _provider;
         private readonly IConfiguration _configuration;
@@ -14,6 +14,9 @@ namespace TruckSlip.ViewModels
         private IDataService Database => _provider.Current; 
         private string DatabaseUrl => _configuration.GetSection("Firebase")["DatabaseUrl"] ?? throw new Exception("Database Error");
         private bool _isDatabaseConnected = false;
+        [ObservableProperty] private bool isAdmin;
+        [ObservableProperty] private bool isUser;
+        [ObservableProperty] private bool isRemote;
 
         public bool UseRemote
         {
@@ -41,6 +44,10 @@ namespace TruckSlip.ViewModels
             if (_isDatabaseConnected) return;
             try
             {
+                //await _firebaseAuthClient.ResetEmailPasswordAsync(_firebaseAuthClient.User?.Info.Email ?? string.Empty);
+                
+                await GetRolesAsync();
+                if (!(IsAdmin || IsRemote)) UseRemote = false;
                 if (UseRemote)
                 {
                     _provider.UseRemote();
@@ -63,6 +70,23 @@ namespace TruckSlip.ViewModels
             { await Shell.Current.DisplayAlert("Error", ex.Message, "OK"); }
         }
 
+        private async Task GetRolesAsync()
+        {
+            IsAdmin = await IsInRole("IsAdmin");
+            IsUser = await IsInRole("IsUser");
+            IsRemote = await IsInRole("IsRemote");
+        }
+
+        private async Task<bool> IsInRole(string role)
+        {
+            var user = _firebaseAuthClient.User;
+            if (user == null) return false;
+            var currentUser = await FirebaseAuth.DefaultInstance.GetUserAsync(user.Uid);
+            return currentUser.CustomClaims != null &&
+                   currentUser.CustomClaims.ContainsKey(role) &&
+                   (bool)currentUser.CustomClaims[role];
+        }
+
         private void RefreshDataConnection(User user)
         {
             if (user == null) throw new ArgumentNullException(nameof(user), "User cannot be null.");
@@ -78,7 +102,6 @@ namespace TruckSlip.ViewModels
         [RelayCommand]
         public async Task SignOut()
         {
-            if (!UseRemote) return;
             try
             {
                 _firebaseAuthClient.SignOut();
