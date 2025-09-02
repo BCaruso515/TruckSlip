@@ -10,8 +10,6 @@
         [ObservableProperty] private bool _isPickup;
         [ObservableProperty] private bool _isComboboxEnabled;
 
-        private static bool SkipRefresh { get; set; } = false;
-
         private readonly IDataServiceProvider _provider;
         private IDataService Database => _provider.Current;
         private int _index = -1;
@@ -27,12 +25,6 @@
         {
             IsComboboxEnabled = true;
             SetButtonText(!IsComboboxEnabled);
-
-            if (SkipRefresh)
-            { 
-                SkipRefresh = false;
-                return; 
-            }
 
             EnableAdd = await RefreshCompanyAsync(Database);
             if (!EnableAdd)
@@ -193,7 +185,6 @@
         [RelayCommand]
         public async Task AddItems()
         {
-            SkipRefresh = true;
             await Shell.Current.GoToAsync(nameof(OrderItemsPage), true,
                 new Dictionary<string, object>
                 {

@@ -21,7 +21,11 @@
             IsPassword="True"
             Placeholder="Confirm your password"
             Text="{Binding ConfirmPassword}" />
-        <Button Command="{Binding SignUpCommand}" Text="Submit" />
+        <Button
+            Command="{Binding SignUpCommand}"
+            HorizontalOptions="Start"
+            Text="Submit"
+            WidthRequest="150" />
     </VerticalStackLayout>
 </ContentPage>
 

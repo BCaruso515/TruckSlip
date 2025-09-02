@@ -6,16 +6,17 @@
     xmlns:helpers="clr-namespace:TruckSlip.Helpers"
     xmlns:local="clr-namespace:TruckSlip"
     xmlns:views="clr-namespace:TruckSlip.Views"
+    xmlns:controls="clr-namespace:TruckSlip.Controls"
     Title="Truck Tickets">
 
     <Shell.ForegroundColor>
         <AppThemeBinding Dark="{StaticResource White}" Light="{StaticResource Black}" />
-    </Shell.ForegroundColor>
+    </Shell.ForegroundColor>   
+
     <ShellContent
         ContentTemplate="{DataTemplate views:SignInPage}"
         FlyoutItemIsVisible="False"
         Route="SignInPage" />
-
     <FlyoutItem Title="Home" Route="HomePage">
         <FlyoutItem.Icon>
             <FontImageSource

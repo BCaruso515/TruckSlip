@@ -1,4 +1,5 @@
 ﻿using Firebase.Auth;
+using FirebaseAdmin.Auth;
 
 namespace TruckSlip.ViewModels
 {
@@ -37,12 +38,17 @@ namespace TruckSlip.ViewModels
         {
             try
             {
-                var userCredential = await _firebaseAuthClient.CreateUserWithEmailAndPasswordAsync(email, password, displayName);
-                if (userCredential != null)
+                var userCredential = await _firebaseAuthClient.CreateUserWithEmailAndPasswordAsync(email, password, displayName)
+                    ?? throw new Exception("User creation failed");
+
+                Dictionary<string, object> claims = new()
                 {
-                    await ShowNotification("User created successfully");
-                    await Shell.Current.GoToAsync("..");
-                }
+                    { "IsUser", true }
+                };
+                
+                await FirebaseAuth.DefaultInstance.SetCustomUserClaimsAsync(userCredential.User.Uid, claims );
+                await ShowNotification("User created successfully");
+                await Shell.Current.GoToAsync("..");                
             }
             catch (Exception ex)
             {

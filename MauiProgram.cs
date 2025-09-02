@@ -98,8 +98,8 @@ namespace TruckSlip
             builder.Services.AddTransient<OrderItemsViewModel>();
             builder.Services.AddTransient<ProductPage>();
             builder.Services.AddTransient<ProductViewModel>();
-            builder.Services.AddTransient<SignFormPage>();
-            builder.Services.AddTransient<SignFormViewModel>();
+            builder.Services.AddTransient<ResetPasswordPage>();
+            builder.Services.AddTransient<ResetPasswordViewModel>();
             builder.Services.AddTransient<SignInPage>();
             builder.Services.AddTransient<SignInViewModel>();
             builder.Services.AddTransient<UnitTypesPage>();

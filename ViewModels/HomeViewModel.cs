@@ -42,12 +42,14 @@ namespace TruckSlip.ViewModels
         public async Task Appearing()
         {
             if (_isDatabaseConnected) return;
+            
             try
             {
-                //await _firebaseAuthClient.ResetEmailPasswordAsync(_firebaseAuthClient.User?.Info.Email ?? string.Empty);
-                
+                Shell.Current.FlyoutHeader = new Controls.FlyoutHeader(_firebaseAuthClient);
                 await GetRolesAsync();
-                if (!(IsAdmin || IsRemote)) UseRemote = false;
+                if (!IsAdmin)
+                    UseRemote = IsRemote;
+
                 if (UseRemote)
                 {
                     _provider.UseRemote();

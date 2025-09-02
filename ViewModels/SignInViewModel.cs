@@ -21,6 +21,10 @@ namespace TruckSlip.ViewModels
                 await Shell.Current.GoToAsync(nameof(SignUpPage), true);
 
             [RelayCommand]
+            public async Task ResetPasswordPage() =>
+                await Shell.Current.GoToAsync(nameof(ResetPasswordPage), true);
+
+            [RelayCommand]
             public async Task SignIn()
             {
                 try

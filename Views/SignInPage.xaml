@@ -17,7 +17,19 @@
             EventName="Appearing" />
     </ContentPage.Behaviors>
 
-    <VerticalStackLayout Padding="10" Spacing="15">
+    <VerticalStackLayout
+        Padding="10"
+        Spacing="15"
+        VerticalOptions="Center">
+        <Label
+            FontAttributes="Bold"
+            FontSize="24"
+            HorizontalOptions="Center"
+            Text="Welcome!" />
+        <Label
+            FontSize="18"
+            HorizontalOptions="Center"
+            Text="Sign in to continue" />
         <Entry
             Keyboard="Email"
             Placeholder="Enter your email"
@@ -30,10 +42,40 @@
             <Label Text="Stay signed in" VerticalOptions="Center" />
             <CheckBox IsChecked="{Binding RememberMe}" VerticalOptions="Center" />
         </HorizontalStackLayout>
-        <Button Command="{Binding SignInCommand}" Text="Sign In" />
-        <HorizontalStackLayout Spacing="15">
-            <Label Text="Don't have an account?" VerticalOptions="End" />
-            <Button Command="{Binding SignUpPageCommand}" Text="Sign Up" />
-        </HorizontalStackLayout>
+
+        <Grid
+            ColumnDefinitions="Auto, Auto"
+            ColumnSpacing="15"
+            RowDefinitions="Auto, Auto, * "
+            RowSpacing="15">
+            <Button
+                Grid.ColumnSpan="2"
+                Command="{Binding SignInCommand}"
+                HorizontalOptions="Start"
+                Text="Sign In"
+                WidthRequest="180" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="Don't have an account?"
+                VerticalOptions="End" />
+            <Button
+                Grid.Row="1"
+                Grid.Column="1"
+                Command="{Binding SignUpPageCommand}"
+                Text="Sign Up"
+                WidthRequest="150" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="0"
+                Text="Forgot Password?"
+                VerticalOptions="End" />
+            <Button
+                Grid.Row="2"
+                Grid.Column="1"
+                Command="{Binding ResetPasswordPageCommand}"
+                Text="Reset Password"
+                WidthRequest="150" />
+        </Grid>
     </VerticalStackLayout>
 </ContentPage>
