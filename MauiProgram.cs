@@ -8,6 +8,7 @@ using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Configuration;
 using PdfSharp.Fonts;
 using System.Globalization;
+using System.Reflection;
 using TruckSlip.FontResolver;
 
 namespace TruckSlip
@@ -31,12 +32,15 @@ namespace TruckSlip
             GlobalFontSettings.FontResolver = new GenericFontResolver();
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
 
-            IConfiguration config;
+            // Add configuration from embedded appsettings.json            
+            var assembly = Assembly.GetExecutingAssembly();
+            using var configurationStream = assembly.GetManifestResourceStream($"{assembly.GetName().Name}.appsettings.json")
+                ?? throw new Exception("Error loading appsettings.json");
 
-            config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            var config = new ConfigurationBuilder()
+                .AddJsonStream(configurationStream)
                 .Build();
-
+            builder.Configuration.AddConfiguration(config);
             builder.Services.AddSingleton<IConfiguration>(config);
 
             IConfigurationSection section = config.GetSection("Firebase");

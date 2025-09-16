@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui.Views;
 using System.Collections;
 
 namespace TruckSlip.Controls;
@@ -18,4 +17,5 @@ public partial class ComboBoxPopup : Popup
         var currentItem = e.CurrentSelection.FirstOrDefault();
         await CloseAsync(currentItem);
     }
+
 }

@@ -16,9 +16,6 @@
             Command="{Binding AppearingCommand}"
             EventName="Appearing" />
     </ContentPage.Behaviors>
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding SignOutCommand}" Text="Sign Out" />
-    </ContentPage.ToolbarItems>
 
     <ScrollView>
         <Grid

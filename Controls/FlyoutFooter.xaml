@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<VerticalStackLayout
+    x:Class="TruckSlip.Controls.FlyoutFooter"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:TruckSlip.Helpers">
+
+    <Button
+        Clicked="Button_Clicked"
+        ContentLayout="Right, 24"
+        FontAttributes="Bold"
+        FontSize="24"
+        HorizontalOptions="Center"
+        Text="Sign Out">
+        <Button.ImageSource>
+            <FontImageSource
+                FontFamily="free-solid-900"
+                Glyph="{x:Static helpers:FontAwesomeHelper.ArrowRightFromBracket}"
+                Size="24"
+                Color="{AppThemeBinding Light={StaticResource White},
+                                        Dark={StaticResource Black}}" />
+        </Button.ImageSource>
+    </Button>
+</VerticalStackLayout>

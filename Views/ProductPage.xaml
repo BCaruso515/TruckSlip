@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:TruckSlip.Controls"
     xmlns:datasource="clr-namespace:TruckSlip.Models"
+    xmlns:templates="clr-namespace:TruckSlip.DataTemplates"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:TruckSlip.ViewModels"
     x:Name="this"
@@ -34,18 +35,13 @@
             SelectedItem="{Binding SelectedProduct}"
             SelectionChangedCommand="{Binding SelectedProductChangedCommand}">
             <controls:ComboBox.ItemTemplate>
-                <DataTemplate x:DataType="datasource:Product">
-                    <HorizontalStackLayout Spacing="10">
-                        <Label Text="{Binding TaskCode}" />
-                        <Label Text="{Binding Name}" />
-                    </HorizontalStackLayout>
-                </DataTemplate>
+                <templates:ProductTemplate />
             </controls:ComboBox.ItemTemplate>
         </controls:ComboBox>
         <Label FontAttributes="Bold" Text="Item Name" />
         <Entry
             x:Name="NameEntry"
-            HorizontalOptions="StartAndExpand"
+            HorizontalOptions="Start"
             IsEnabled="{Binding IsEnabled}"
             MinimumWidthRequest="180"
             Text="{Binding SelectedProduct.Name}">
@@ -56,7 +52,7 @@
         <Label FontAttributes="Bold" Text="Task Code" />
         <Entry
             FontSize="18"
-            HorizontalOptions="StartAndExpand"
+            HorizontalOptions="Start"
             IsEnabled="{Binding IsEnabled}"
             MinimumWidthRequest="180"
             Text="{Binding SelectedProduct.TaskCode}">
@@ -68,7 +64,6 @@
         <Label FontAttributes="Bold" Text="Unit" />
         <controls:ComboBox
             DisplayMember="UnitName"
-            HorizontalOptions="FillAndExpand"
             IsEnabled="{Binding IsEnabled}"
             ItemSource="{Binding UnitTypes}"
             Placeholder="Required"
@@ -82,7 +77,6 @@
         <Label FontAttributes="Bold" Text="Type" />
         <controls:ComboBox
             DisplayMember="TypeName"
-            HorizontalOptions="FillAndExpand"
             IsEnabled="{Binding IsEnabled}"
             ItemSource="{Binding InventoryTypes}"
             Placeholder="Required"

@@ -32,9 +32,5 @@
 	<string>com.barrycaruso.trucktickets</string>
 	<key>CFBundleDisplayName</key>
 	<string>Truck Tickets</string>
-  <key>UILaunchStoryboardName</key>
-  <string>MauiSplash</string>
-  <key>UIRequiresFullScreen</key>
-  <true/>
 </dict>
 </plist>

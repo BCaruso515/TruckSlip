@@ -14,6 +14,8 @@ namespace TruckSlip.ViewModels
         private IDataService Database => _provider.Current; 
         private string DatabaseUrl => _configuration.GetSection("Firebase")["DatabaseUrl"] ?? throw new Exception("Database Error");
         private bool _isDatabaseConnected = false;
+        private bool _isLoadDefaults = false;
+        private bool _isFactoryReset = false;
         [ObservableProperty] private bool isAdmin;
         [ObservableProperty] private bool isUser;
         [ObservableProperty] private bool isRemote;
@@ -46,6 +48,7 @@ namespace TruckSlip.ViewModels
             try
             {
                 Shell.Current.FlyoutHeader = new Controls.FlyoutHeader(_firebaseAuthClient);
+                Shell.Current.FlyoutFooter = new Controls.FlyoutFooter(_firebaseAuthClient);
                 await GetRolesAsync();
                 if (!IsAdmin)
                     UseRemote = IsRemote;
@@ -66,6 +69,18 @@ namespace TruckSlip.ViewModels
 
                 await Database.InitializeDatabaseAsync();
 
+                if (!UseRemote && _isLoadDefaults)
+                {
+                    await LoadDefaultData();
+                    _isLoadDefaults = false;
+                }
+
+                if (!UseRemote && _isFactoryReset)
+                {
+                    await DeleteAllData();
+                    _isFactoryReset = false;
+                }
+
                 _isDatabaseConnected = true;
             }
             catch (Exception ex)
@@ -77,6 +92,8 @@ namespace TruckSlip.ViewModels
             IsAdmin = await IsInRole("IsAdmin");
             IsUser = await IsInRole("IsUser");
             IsRemote = await IsInRole("IsRemote");
+            _isLoadDefaults = await IsInRole("IsDefault");
+            _isFactoryReset = await IsInRole("IsReset");
         }
 
         private async Task<bool> IsInRole(string role)
@@ -99,19 +116,6 @@ namespace TruckSlip.ViewModels
             });
             var newService = new FirebaseDataService(firebaseClient);
             _provider.UpdateRemote(newService);
-        }
-
-        [RelayCommand]
-        public async Task SignOut()
-        {
-            try
-            {
-                _firebaseAuthClient.SignOut();
-                Preferences.Set("RememberMe", false);
-                await Shell.Current.GoToAsync($"//{nameof(SignInPage)}");
-            }
-            catch (Exception ex)
-            { await Shell.Current.DisplayAlert("Error", ex.Message, "OK"); }
         }
 
         [RelayCommand]

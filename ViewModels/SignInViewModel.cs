@@ -58,9 +58,10 @@ namespace TruckSlip.ViewModels
 
             private static void ValidateInputFields(string email, string password)
             {
-                if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("Email cannot be empty.", nameof(email));
-
-                if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Password cannot be empty.", nameof(password));
+                if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("Email address can not be blank.");
+                if (!email.Contains('@')) throw new ArgumentException("Email address is not valid.");
+                if (!email.Contains('.')) throw new ArgumentException("Email address is not valid.");
+                if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Password cannot be blank.");
             }
         }
     }

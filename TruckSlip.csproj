@@ -28,8 +28,8 @@
 		<ApplicationId>com.barrycaruso.trucktickets</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+		<ApplicationVersion>3</ApplicationVersion>
 
 		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
 		<WindowsPackageType>None</WindowsPackageType>
@@ -49,31 +49,33 @@
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
 		<AppInstallerUri>D:\Shared\deploy\TruckTickets</AppInstallerUri>
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
 	  <CodesignKey>Apple Development: Created via API (4HMBRJ35PG)</CodesignKey>
 	  <CodesignProvision>VS: com.barrycaruso.trucktickets Development</CodesignProvision>
 	  <ProvisioningType>automatic</ProvisioningType>
 	</PropertyGroup>
+	</PropertyGroup>  
 
   <PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and '$(Configuration)' == 'Release'">
     <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
     <ArchiveOnBuild>true</ArchiveOnBuild>
     <CodesignKey>Apple Distribution: Barry Caruso (645X72WD4K)</CodesignKey>
     <CodesignProvision>MyMAUIIOSTruckTicketsApp</CodesignProvision>
-  </PropertyGroup>
+    <ProvisioningType>manual</ProvisioningType>
+  </PropertyGroup>  
 
-  <ItemGroup>
+	<ItemGroup>
 		<!-- App Icon -->
-    <MauiIcon Include="Resources\AppIcon\appicon.png" />
+		<!--<MauiIcon Include="Resources\AppIcon\appicon.png" ForegroundScale="0.65"/>-->
+		<MauiIcon Include="Resources\AppIcon\appicon.png" />
 
-    <!-- Splash Screen -->
-    <MauiSplashScreen Include="Resources\Splash\splash.png" Color="#512BD4" BaseSize="128,128" />
-
-    <!-- Images -->
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.png" Color="#472094" />
+		
+		<!-- Images 
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />-->
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -81,28 +83,17 @@
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
-    
-	<ItemGroup>
-	  <None Remove="appsettings.json" />
-	  <None Remove="Platforms\iOS\GoogleService-Info.plist" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="appsettings.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" Version="11.2.0" />
     <PackageReference Include="CommunityToolkit.MVVM" Version="8.3.2" />
-    <PackageReference Include="FirebaseAdmin" Version="3.3.0" />
+    <PackageReference Include="FirebaseAdmin" Version="3.4.0" />
     <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
     <PackageReference Include="FirebaseDatabase.net" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.9" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.80" />
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.80" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
     <PackageReference Include="PDFsharp-MigraDoc" Version="6.2.1" />
     <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
   </ItemGroup>
@@ -123,6 +114,11 @@
     <MauiFont Remove="Resources\Fonts\OpenSans-Regular.ttf" />
     <MauiFont Remove="Resources\Fonts\OpenSans-Semibold.ttf" />
   </ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	</ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Fonts\OpenSans-Regular.ttf" />

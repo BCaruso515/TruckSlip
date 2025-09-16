@@ -23,9 +23,16 @@ namespace TruckSlip.ViewModels
         [RelayCommand]
         public async Task Appearing()
         {
+
             if (SelectedOrder == null || SelectedOrder.OrderId == 0)
             {
                 await Shell.Current.DisplayAlert("Error!", "Order cannot be null!", "Ok");
+                return;
+            }
+
+            if (!await RefreshOrdersAsync(Database, SelectedOrder.JobsiteId))
+            {
+                await Shell.Current.DisplayAlert("Error!", "There was an error accessing your order, Please try again.", "Ok");
                 return;
             }
 

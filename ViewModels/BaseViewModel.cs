@@ -2,25 +2,25 @@
 {
     public partial class BaseViewModel:ObservableObject
     {
-        [ObservableProperty] private static ObservableCollection<Order> orders = [];
-        [ObservableProperty] private static ObservableCollection<Product> products = [];
-        [ObservableProperty] private static ObservableCollection<UnitType> unitTypes = [];
-        [ObservableProperty] private static ObservableCollection<InventoryType> inventoryTypes = [];
-        [ObservableProperty] private static ObservableCollection<Jobsite> jobsites = [];
-        [ObservableProperty] private static ObservableCollection<Company> companies = new();
-        [ObservableProperty] private static ObservableCollection<OrderItemsQuery> itemsQuery = [];
+        [ObservableProperty] private ObservableCollection<Order> orders = [];
+        [ObservableProperty] private ObservableCollection<Product> products = [];
+        [ObservableProperty] private ObservableCollection<UnitType> unitTypes = [];
+        [ObservableProperty] private ObservableCollection<InventoryType> inventoryTypes = [];
+        [ObservableProperty] private ObservableCollection<Jobsite> jobsites = [];
+        [ObservableProperty] private ObservableCollection<Company> companies = new();
+        [ObservableProperty] private ObservableCollection<OrderItemsQuery> itemsQuery = [];
 
 
-        [ObservableProperty] private static string fontFamily = "free-solid-900";
-        [ObservableProperty] private static string editSaveButtonText = string.Empty;
-        [ObservableProperty] private static string addCancelButtonText = string.Empty;
-        [ObservableProperty] private static string deleteImage = FontAwesomeHelper.TrashCan;
-        [ObservableProperty] private static string editSaveImage = string.Empty;
-        [ObservableProperty] private static string addCancelImage = string.Empty;
-        [ObservableProperty] private static bool isEnabled;
-        [ObservableProperty] private static bool enableDelete;
-        [ObservableProperty] private static bool enableAdd;
-        [ObservableProperty] private static bool enableEdit;
+        [ObservableProperty] private string fontFamily = "free-solid-900";
+        [ObservableProperty] private string editSaveButtonText = string.Empty;
+        [ObservableProperty] private string addCancelButtonText = string.Empty;
+        [ObservableProperty] private string deleteImage = FontAwesomeHelper.TrashCan;
+        [ObservableProperty] private string editSaveImage = string.Empty;
+        [ObservableProperty] private string addCancelImage = string.Empty;
+        [ObservableProperty] private bool isEnabled;
+        [ObservableProperty] private bool enableDelete;
+        [ObservableProperty] private bool enableAdd;
+        [ObservableProperty] private bool enableEdit;
 
         protected bool RefreshInventoryTypes()
         {

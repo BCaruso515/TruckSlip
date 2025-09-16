@@ -1,16 +1,14 @@
 using System.Collections;
 using System.Windows.Input;
-using CommunityToolkit.Maui.Views;
-
 
 namespace TruckSlip.Controls;
 
 public partial class ComboBox : ContentView
 {
-	public ComboBox()
-	{
-		InitializeComponent();
-	}
+    public ComboBox()
+    {
+        InitializeComponent();
+    }
     public required DataTemplate ItemTemplate { get; set; }
 
     public required string DisplayMember { get; set; }
