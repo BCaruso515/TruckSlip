@@ -4,6 +4,7 @@
     {
         [ObservableProperty] private UnitType _selectedUnit = new();
         private int _index = -1;
+        private bool _isPageInitialized = false;
         private readonly IDataServiceProvider _provider;
         private IDataService Database => _provider.Current;
 
@@ -16,6 +17,7 @@
         [RelayCommand]
         public async Task Appearing()
         {
+            if (_isPageInitialized) return;
             SetButtonText(false);
             if (! await RefreshUnitTypesAsync(Database))
             {
@@ -25,6 +27,7 @@
 
             SelectedUnit = UnitTypes.FirstOrDefault() ?? new();
             EnableDelete = EnableEdit =  true;
+            _isPageInitialized = true;
         }
 
         [RelayCommand]

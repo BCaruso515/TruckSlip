@@ -10,6 +10,8 @@
         [ObservableProperty] private bool _isPickup;
         [ObservableProperty] private bool _isComboboxEnabled;
 
+        private bool _isPageInitialized = false;
+
         private readonly IDataServiceProvider _provider;
         private IDataService Database => _provider.Current;
         private int _index = -1;
@@ -23,6 +25,8 @@
         [RelayCommand]
         public async Task Appearing()
         {
+            if (_isPageInitialized) return;
+
             IsComboboxEnabled = true;
             SetButtonText(!IsComboboxEnabled);
 
@@ -36,6 +40,7 @@
                 return;
             }
             SelectedCompany = Companies.FirstOrDefault() ?? new(); 
+            _isPageInitialized = true;
         }
 
         [RelayCommand]

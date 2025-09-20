@@ -12,6 +12,7 @@ namespace TruckSlip.ViewModels
         [ObservableProperty] bool _enableAddToOrder;
 
         private readonly IDataServiceProvider _provider;
+        private bool _isPageInitialized = false;
         private IDataService Database => _provider.Current;
 
         public OrderItemsViewModel(IDataServiceProvider provider)
@@ -23,7 +24,7 @@ namespace TruckSlip.ViewModels
         [RelayCommand]
         public async Task Appearing()
         {
-
+            if (_isPageInitialized) return;
             if (SelectedOrder == null || SelectedOrder.OrderId == 0)
             {
                 await Shell.Current.DisplayAlert("Error!", "Order cannot be null!", "Ok");
@@ -52,6 +53,7 @@ namespace TruckSlip.ViewModels
             EnableAddToOrder = true;
 
             await RefreshItemsQueryAsync(Database, SelectedOrder.OrderId);
+            _isPageInitialized = true;
         }
 
         [RelayCommand]

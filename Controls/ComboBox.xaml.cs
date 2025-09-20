@@ -1,14 +1,18 @@
+using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Extensions;
+using Microsoft.Maui.Controls.Shapes;
 using System.Collections;
 using System.Windows.Input;
+
 
 namespace TruckSlip.Controls;
 
 public partial class ComboBox : ContentView
 {
-    public ComboBox()
-    {
-        InitializeComponent();
-    }
+	public ComboBox()
+	{
+		InitializeComponent();
+	}
     public required DataTemplate ItemTemplate { get; set; }
 
     public required string DisplayMember { get; set; }
@@ -30,7 +34,7 @@ public partial class ComboBox : ContentView
     {
         var controls = (ComboBox)bindable;
 
-        if (newValue != null)
+        if (newValue != null && !Equals(newValue, oldValue))
         {
             var propertyInfo = newValue.GetType().GetProperty(controls.DisplayMember);
             if (propertyInfo != null)
@@ -40,6 +44,7 @@ public partial class ComboBox : ContentView
                 {
                     controls.displayLabel.Text = value.ToString();
                     controls.SelectionChangedCommand?.Execute(null);
+                    controls.SelectionChangedEvent?.Invoke(controls, EventArgs.Empty);
                 }
             }
         }
@@ -83,7 +88,7 @@ public partial class ComboBox : ContentView
         set => SetValue(ItemSourceProperty, value);
     }
 
-    //public event EventHandler<EventArgs>? SelectionChangedEvent;
+    public event EventHandler<EventArgs>? SelectionChangedEvent;
 
     public static readonly BindableProperty SelectionChangedCommandProperty = BindableProperty.Create(
        propertyName: nameof(SelectionChangedCommand),
@@ -130,15 +135,26 @@ public partial class ComboBox : ContentView
 
         if (newValue != null)
         {
-            if ((bool)newValue)
+            if (newValue is bool show && show)
             {
                 var popup = new ComboBoxPopup(controls.ItemSource, controls.ItemTemplate);
-                var result = await Shell.Current.ShowPopupAsync(popup);
-
-                if (result != null)
+                var result = await Shell.Current.ShowPopupAsync<object>(popup, new PopupOptions
                 {
-                    controls.SelectedItem = result;
+                    Shape = new RoundRectangle
+                    {
+                        CornerRadius = new CornerRadius(25, 0, 0, 25),
+                        StrokeThickness = 2,
+                        Stroke = Brush.DimGray
+                    }
+                }, CancellationToken.None);
+                
+                if (result.WasDismissedByTappingOutsideOfPopup || result.Result == null)
+                {
+                    controls.DisplayComboBoxControl = false;
+                    return; // No selection was made
                 }
+
+                controls.SelectedItem = result.Result;
                 controls.DisplayComboBoxControl = false;
             }
         }

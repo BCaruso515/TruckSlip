@@ -73,7 +73,7 @@ namespace TruckSlip.Report
             image.Height = Unit.FromInch(0.6);
 
             // Add title
-            var title = row.Cells[1].AddParagraph("TRUCK SLIP");
+            var title = row.Cells[1].AddParagraph("TRUCK TICKET");
             title.Format.Font.Size = 14;
             title.Format.Font.Bold = true;
 

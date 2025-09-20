@@ -8,6 +8,7 @@
         private readonly IDataServiceProvider _provider;
         private IDataService Database => _provider.Current;
         private int _index = -1;
+        private bool _isPageInitialized = false;
 
         public JobsiteViewModel(IDataServiceProvider provider)
         {
@@ -32,6 +33,7 @@
         [RelayCommand]
         public async Task Appearing()
         {
+            if (_isPageInitialized) return;
             SetButtonText(false);
             EnableAdd = await RefreshCompanyAsync(Database);
             if (!EnableAdd)
@@ -42,6 +44,7 @@
                 return;
             }
             SelectedCompany = Companies.FirstOrDefault() ?? new();
+            _isPageInitialized = true;
         }
 
         [RelayCommand]
